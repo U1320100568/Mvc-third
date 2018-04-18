@@ -1,0 +1,39 @@
+﻿@using IntelligenceCloud.Helpers
+
+<ul class="nav navbar-nav">
+
+    @* *@
+    @if (User.IsInRole("member"))
+    {
+        <li>@Html.ActionLink("附件", "Index", "Attachments")</li>
+       
+        if (User.IsInRole("admin"))
+        {
+            <li>@Html.ActionLink("會員", "Index", "Members")</li>
+        }
+    }
+
+
+
+
+    @if (User.Identity.IsAuthenticated)
+    {
+        <li>@Html.ActionLink("登出", "Logout", "Home")</li>
+    }
+    else
+    {
+        <li>@Html.ActionLink("登入", "Login", "Home")</li>
+    }
+
+    @*<li>@Html.ActionLink("會員", "Index", "Members")</li>
+        <li>@Html.ActionLink("登出", "Logout", "Home")</li>
+        <li>@Html.ActionLink("登入", "Login", "Home")</li>*@
+
+
+</ul>
+@if (IdentityHelper.UserName != string.Empty)
+{
+    <ul class="nav navbar-right">
+        <li>@Html.ActionLink(IdentityHelper.UserName, "#") </li>
+    </ul>
+}

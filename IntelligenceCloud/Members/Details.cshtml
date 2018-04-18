@@ -1,0 +1,83 @@
+﻿@model IntelligenceCloud.Models.Member
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Member</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.MemberAccount)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MemberAccount)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MemberName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MemberName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MemberPwd)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MemberPwd)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RoleId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RoleId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.isDeleted)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.isDeleted)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Role.FirstOrDefault().RoleAdmin)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Role.FirstOrDefault().RoleAdmin)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Role.FirstOrDefault().RoleNormal)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Role.FirstOrDefault().RoleNormal)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Role.FirstOrDefault().RoleLock)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Role.FirstOrDefault().RoleLock)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.MemberId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

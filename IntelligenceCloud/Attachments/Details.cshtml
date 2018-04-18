@@ -1,0 +1,83 @@
+﻿@model IntelligenceCloud.Models.Attachment
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Attachment</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.AttachmentPath)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AttachmentPath)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AttachmentName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AttachmentName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AttachmentType)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AttachmentType)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MemberId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MemberId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.isDeleted)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.isDeleted)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UploadTime)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UploadTime)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DeletedTime)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DeletedTime)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DownloadTime)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DownloadTime)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.AttachmentId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
