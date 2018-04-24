@@ -1,0 +1,95 @@
+﻿@model IntelligenceCloud.Models.Attachment
+@using IntelligenceCloud.Helpers
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<h2>詳細資料</h2>
+
+<h4>附件</h4>
+<hr />
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <div>
+
+                <dl class="dl-horizontal">
+                    <dt>
+                        @Html.DisplayNameFor(model => model.AttachmentPath)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.AttachmentPath)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.AttachmentName)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.AttachmentName)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.AttachmentType)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.AttachmentType)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.MemberId)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayName(IdentityHelper.GetMemberName(Model.MemberId))
+                    </dd>
+
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.UploadTime)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.UploadTime)
+                    </dd>
+
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.DownloadTime)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.DownloadTime)
+                    </dd>
+
+                </dl>
+            </div>
+
+        </div>
+        @if (Model.AttachmentRecord.Count > 0)
+        {
+            <div class="col-md-6">
+                <dl>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.AttachmentRecord)
+                    </dt>
+                    @foreach (var item in Model.AttachmentRecord)
+                    {
+                        <dd>
+                            @Html.DisplayFor(modelItem => item.TimeDownload)
+                        </dd>
+                    }
+                </dl>
+            </div>
+        }
+    </div>
+</div>
+
+<p>
+    
+    @Html.ActionLink("Back to List", "Index")
+</p>

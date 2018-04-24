@@ -20,15 +20,34 @@ namespace IntelligenceCloud.Models
             [Display(Name = "擁有人")]
             public Nullable<int> MemberId { get; set; }
             [Display(Name = "上傳時間")]
+            [DataType(DataType.DateTime)]
+            [DisplayFormat(DataFormatString = "{0: yyyy-mm-dd HH:mm:ss}", ApplyFormatInEditMode = true, ConvertEmptyStringToNull = true, NullDisplayText = "-")]
             public Nullable<System.DateTime> UploadTime { get; set; }
             [Display(Name = "最後下載時間")]
+            [DataType(DataType.DateTime)]
+            [DisplayFormat(DataFormatString = "{0: yyyy-mm-dd HH:mm:ss}", ApplyFormatInEditMode = true, ConvertEmptyStringToNull = true, NullDisplayText = "-")]
             public Nullable<System.DateTime> DownloadTime { get; set; }
-
-            
+            [Display(Name = "下載紀錄")]
+            public virtual ICollection<AttachmentRecord> AttachmentRecord { get; set; }
         }
 
         
     }
 
-    
+    [MetadataType(typeof(AttachmentRecordMetadata))]
+    public partial class AttachmentRecord
+    {
+        public class AttachmentRecordMetadata
+        {
+            
+            [Display(Name = "下載紀錄")]
+            [DataType(DataType.DateTime)]
+            [DisplayFormat(DataFormatString = "{0: yyyy-mm-dd HH:mm:ss}", ApplyFormatInEditMode = true, ConvertEmptyStringToNull = true, NullDisplayText = "-")]
+             public Nullable<System.DateTime> TimeDownload { get; set; }
+
+        }
+
+
+    }
+
 }

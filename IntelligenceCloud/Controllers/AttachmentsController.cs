@@ -16,21 +16,24 @@ namespace IntelligenceCloud.Controllers
 {
     public class AttachmentsController : Controller
     {
-       
-        private FileService<Attachment> fileService = new FileService<Attachment>();
+        private AttachmentService AttachService;
 
+        public AttachmentsController()
+        {
+            AttachService = new AttachmentService();
+        }
         // GET: Attachments
         public ActionResult Index()
         {
             //return View(db.Attachment.ToList());
-            return View(fileService.GetAll());
+            return View(AttachService.GetAll());
         }
 
         // GET: Attachments/Details/5
         public ActionResult Details(int? id)
         {
             
-            Attachment attachment = fileService.Get(a => a.AttachmentId == id);
+            Attachment attachment = AttachService.Get(a => a.AttachmentId == id);
             if (attachment == null)
             {
                 return HttpNotFound();
@@ -51,7 +54,7 @@ namespace IntelligenceCloud.Controllers
         {
             if (attachViewModel.AttachFiles.Count() > 0)
             {
-                fileService.CreateViewModelToDatabase(attachViewModel);
+                AttachService.CreateViewModelToDatabase(attachViewModel);
             }
             return RedirectToAction("Index");
         }
@@ -59,8 +62,8 @@ namespace IntelligenceCloud.Controllers
         
         public ActionResult Download(int id)
         {
-            Attachment attachment = fileService.Get(f => f.AttachmentId == id);
-            byte[] data = fileService.Download(attachment);
+            Attachment attachment = AttachService.Get(f => f.AttachmentId == id);
+            byte[] data = AttachService.Download(attachment);
             if(data == null)
             {
                  return RedirectToAction("Index");
@@ -68,15 +71,15 @@ namespace IntelligenceCloud.Controllers
             }
             //更新下載時間
             attachment.DownloadTime = DateTime.Now;
-            fileService.Update(attachment);
-            return File(data, System.Net.Mime.MediaTypeNames.Application.Octet, attachment.AttachmentName);
+            AttachService.Update(attachment);
+            return File(data, System.Net.Mime.MediaTypeNames.Application.Octet, attachment.AttachmentOriginName);
         }
 
         // GET: Attachments/Edit/5
         public ActionResult Edit(int? id)
         {
             
-            Attachment attachment = fileService.Get(a => a.AttachmentId == id);
+            Attachment attachment = AttachService.Get(a => a.AttachmentId == id);
             if (attachment == null)
             {
                 return HttpNotFound();
@@ -93,7 +96,7 @@ namespace IntelligenceCloud.Controllers
         {
             if (ModelState.IsValid)
             {
-                fileService.Update(attachment);
+                AttachService.Update(attachment);
                 return RedirectToAction("Index");
             }
             return View(attachment);
@@ -103,7 +106,7 @@ namespace IntelligenceCloud.Controllers
         public ActionResult Delete(int? id)
         {
 
-            Attachment attachment = fileService.Get(a => a.AttachmentId == id);
+            Attachment attachment = AttachService.Get(a => a.AttachmentId == id);
             if (attachment == null)
             {
                 return HttpNotFound();
@@ -116,11 +119,11 @@ namespace IntelligenceCloud.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Attachment attachment = fileService.Get(a => a.AttachmentId == id);
+            Attachment attachment = AttachService.Get(a => a.AttachmentId == id);
             //更新刪除時間
             attachment.DeletedTime = DateTime.Now;
-            fileService.Update(attachment);
-            fileService.Delete(attachment);
+            AttachService.Update(attachment);
+            AttachService.Delete(attachment);
 
             return RedirectToAction("Index");
         }
@@ -129,7 +132,7 @@ namespace IntelligenceCloud.Controllers
         {
             if (disposing)
             {
-                fileService.Dispose();
+                AttachService.Dispose();
             }
             base.Dispose(disposing);
         }

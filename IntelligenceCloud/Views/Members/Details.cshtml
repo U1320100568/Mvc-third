@@ -1,0 +1,102 @@
+﻿@model IntelligenceCloud.Models.MemberAndFeatureViewModel
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <div>
+                <h4>Member</h4>
+                <hr />
+                <dl class="dl-horizontal">
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Member.MemberAccount)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.Member.MemberAccount)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Member.MemberName)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.Member.MemberName)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Member.MemberPwd)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.Member.MemberPwd)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Member.RoleId)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.Member.RoleId)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Member.isDeleted)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.Member.isDeleted)
+                    </dd>
+                </dl>
+            </div>
+        </div>
+        @if (Model.RoleAndFeature != null)
+        {
+            <div class="col-md-6">
+                <div>
+                    <h4>使用者權限</h4>
+                    @foreach (var role in Model.RoleAndFeature)
+                    {
+                    <div class="panel panel-default">
+                        <div class="panel-heading"><b>權限： @Html.DisplayFor(title => role.FirstOrDefault().Description)</b></div>
+                        <table class="table">
+
+                            
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => role.FirstOrDefault().ControllerName)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => role.FirstOrDefault().ActionName)
+                                </th>
+                            </tr>
+                            @foreach (var feature in role)
+        {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(Model => feature.ControllerName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(Model => feature.ActionName)
+                        </td>
+                    </tr>
+}
+                        </table>
+                    </div>
+                    }
+                </div>
+
+            </div>
+        }
+    </div>
+</div>
+
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Member.MemberId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

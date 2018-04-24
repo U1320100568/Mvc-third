@@ -14,14 +14,24 @@ namespace IntelligenceCloud.Models
     
     public partial class Attachment
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Attachment()
+        {
+            this.AttachmentRecord = new HashSet<AttachmentRecord>();
+        }
+    
         public int AttachmentId { get; set; }
         public string AttachmentPath { get; set; }
         public string AttachmentName { get; set; }
+        public string AttachmentOriginName { get; set; }
         public string AttachmentType { get; set; }
         public Nullable<int> MemberId { get; set; }
         public Nullable<bool> isDeleted { get; set; }
         public Nullable<System.DateTime> UploadTime { get; set; }
         public Nullable<System.DateTime> DeletedTime { get; set; }
         public Nullable<System.DateTime> DownloadTime { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<AttachmentRecord> AttachmentRecord { get; set; }
     }
 }

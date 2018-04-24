@@ -1,0 +1,25 @@
+﻿@model IntelligenceCloud.Models.RoleAndFeatureViewModel
+@{
+    Layout = "";
+}
+
+@using (Html.BeginCollectionItem("RoleAndFeatureViewModel"))
+{
+    <div class="col-md-3">
+        @Html.TextBoxFor(model => model.MemberId, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.MemberId, "", new { @class = "text-danger" })
+    </div>
+    <div class="col-md-3">
+        @Html.TextBoxFor(model => model.Description, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+    </div>
+    <div class="col-md-3">
+        @Html.TextBoxFor(model => model.ControllerName, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.ControllerName, "", new { @class = "text-danger" })
+    </div>
+    <div class="col-md-3">
+        @Html.TextBoxFor(model => model.ActionName, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.ActionName, "", new { @class = "text-danger" })
+    </div>
+}
+

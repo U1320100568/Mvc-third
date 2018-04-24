@@ -10,17 +10,15 @@
 namespace IntelligenceCloud.Models
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class Role
+    public partial class GetRoleAndMember_Result
     {
-        public int RoleId { get; set; }
+        public Nullable<int> FeatureId { get; set; }
         public Nullable<int> RoleNum { get; set; }
-        public int MemberId { get; set; }
-        public string Description { get; set; }
+        public Nullable<int> MemberId { get; set; }
+        public string ControllerName { get; set; }
+        public string ActionName { get; set; }
         public Nullable<bool> RoleLock { get; set; }
-        public Nullable<bool> isDeleted { get; set; }
-    
-        public virtual Member Member { get; set; }
+        public string Description { get; set; }
     }
 }

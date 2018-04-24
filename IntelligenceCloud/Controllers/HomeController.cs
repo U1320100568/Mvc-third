@@ -13,7 +13,13 @@ namespace IntelligenceCloud.Controllers
    
     public class HomeController : Controller
     {
-        private AccountService accountService = new AccountService();
+        private MemberService accountService;
+
+        public HomeController()
+        {
+            accountService = new MemberService();
+        }
+
         [AllowAnonymous]
         public ActionResult Index()
         {

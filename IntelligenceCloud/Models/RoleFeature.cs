@@ -15,11 +15,9 @@ namespace IntelligenceCloud.Models
     public partial class RoleFeature
     {
         public int FeatureId { get; set; }
-        public int RoleId { get; set; }
-        public Nullable<bool> FileUpload { get; set; }
-        public Nullable<bool> FileDownload { get; set; }
-        public Nullable<bool> ManageAccount { get; set; }
-        public Nullable<bool> ManageRole { get; set; }
+        public int RoleNum { get; set; }
+        public string ControllerName { get; set; }
+        public string ActionName { get; set; }
         public Nullable<bool> isDeleted { get; set; }
     }
 }

@@ -12,15 +12,12 @@ namespace IntelligenceCloud.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Role
+    public partial class AttachmentRecord
     {
-        public int RoleId { get; set; }
-        public Nullable<int> RoleNum { get; set; }
-        public int MemberId { get; set; }
-        public string Description { get; set; }
-        public Nullable<bool> RoleLock { get; set; }
-        public Nullable<bool> isDeleted { get; set; }
+        public int AttachmentRecordId { get; set; }
+        public int AttachmentId { get; set; }
+        public Nullable<System.DateTime> TimeDownload { get; set; }
     
-        public virtual Member Member { get; set; }
+        public virtual Attachment Attachment { get; set; }
     }
 }
