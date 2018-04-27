@@ -5,7 +5,7 @@ using System.Web;
 
 namespace IntelligenceCloud.Models
 {
-    public class RoleAndFeatureViewModel
+    public partial class RoleAndFeatureViewModel
     {
         
         public int FeatureId { get; set; }
@@ -17,7 +17,7 @@ namespace IntelligenceCloud.Models
         public string Description { get; set; }
     }
 
-    public class MemberAndFeatureViewModel
+    public partial class MemberAndFeatureViewModel
     {
         public Member Member { get; set; }
         public IQueryable<IGrouping<int? ,RoleAndFeatureViewModel>> RoleAndFeature { get; set; }
@@ -28,9 +28,5 @@ namespace IntelligenceCloud.Models
         public virtual ICollection<RoleAndFeatureViewModel> RoleAndFeatureViewModel { get; set; }
     }
 
-    public class EditMemberViewModel
-    {
-        public virtual IEnumerable<Role> Roles { get; set; }
-        public virtual List<Member> Members { get; set; }
-    }
+    
 }

@@ -42,13 +42,7 @@
         </div>
     </div>
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.RoleId, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.RoleId, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.RoleId, "", new { @class = "text-danger" })
-        </div>
-    </div>
+   
 
     <div class="form-group">
         @Html.LabelFor(model => model.isDeleted, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -64,15 +58,7 @@
 
     
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.Role.FirstOrDefault().RoleLock, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            <div class="checkbox">
-                @Html.EditorFor(model => model.Role.FirstOrDefault().RoleLock)
-                @Html.ValidationMessageFor(model => model.Role.FirstOrDefault().RoleLock, "", new { @class = "text-danger" })
-            </div>
-        </div>
-    </div>
+   
 
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">

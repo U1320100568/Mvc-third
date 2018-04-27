@@ -1,0 +1,72 @@
+﻿@model IEnumerable<IntelligenceCloud.Models.RoleFeature>
+
+@{
+    ViewBag.Title = "編輯功能";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>編輯功能</h2>
+
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.FeatureId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ControllerName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ActionName)
+        </th>
+
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FeatureId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ControllerName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ActionName)
+            </td>
+
+            <td>
+
+
+                @Html.ActionLink("Delete", "Delete", new { id = item.FeatureId })
+            </td>
+        </tr>
+    }
+
+</table>
+
+@using (Html.BeginForm("CreateFeature", "Roles", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.FirstOrDefault().ControllerName);
+    @Html.HiddenFor(model => model.FirstOrDefault().RoleNum);
+    @Html.HiddenFor(model => model.FirstOrDefault().isDeleted);
+
+    <div class="input-group pull-right">
+        @Html.TextBoxFor(model => model.FirstOrDefault().ActionName, new { placeholder = "功能名稱", @class = "pull-right form-control" })
+        <div class="input-group-btn ">
+            <input type="submit" value="增加功能" class="btn btn-default " />
+        </div>
+    </div>
+}
+@Html.ActionLink("回到權限頁面", "Details", new { id = Model.FirstOrDefault().RoleNum })
+
+@section Scripts{
+    @Scripts.Render("~/bundles/jqueryval") 
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("input[placeholder='功能名稱']").val("");
+        });
+    </script>
+    }

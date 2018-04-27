@@ -25,6 +25,7 @@ namespace IntelligenceCloud.Models
         public string AttachmentName { get; set; }
         public string AttachmentOriginName { get; set; }
         public string AttachmentType { get; set; }
+        public string AttachmentUse { get; set; }
         public Nullable<int> MemberId { get; set; }
         public Nullable<bool> isDeleted { get; set; }
         public Nullable<System.DateTime> UploadTime { get; set; }

@@ -2,18 +2,23 @@
 
 <ul class="nav navbar-nav">
 
-    @* *@
+
+    @if (FeatureHelper.GetFeature(IdentityHelper.UserId) != null)
+    {
+        <li>@IdentityHelper.UserId</li>
+        foreach (var feature in FeatureHelper.GetFeature(IdentityHelper.UserId))
+        {
+            <li>@Html.ActionLink(feature.Description, "Index", feature.ControllerName)</li>
+        }
+    }
+
+
+
 
     <li>@Html.ActionLink("附件", "Index", "Attachments")</li>
     <li>@Html.ActionLink("權限設定", "Index", "Roles")</li>
-
-    @if (User.IsInRole("admin"))
-    {
-
-    }
-
     <li>@Html.ActionLink("會員", "Index", "Members")</li>
-
+    @**@
 
 
     @if (User.Identity.IsAuthenticated)
@@ -33,7 +38,11 @@
 </ul>
 @if (IdentityHelper.UserName != string.Empty)
 {
-    <ul class="nav navbar-right">
-        <li>@Html.ActionLink(IdentityHelper.UserName, "#") </li>
+    <ul class="nav navbar-nav navbar-right">
+        <li>@Html.ActionLink(IdentityHelper.UserName, "#","",new { onclick = "return false" }) 
+        
+        </li>
+        
     </ul>
 }
+    

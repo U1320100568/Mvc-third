@@ -22,13 +22,16 @@
             @Html.DisplayNameFor(model => model.AttachmentType)
         </th>
         <th>
+            @Html.DisplayNameFor(model => model.AttachmentUse)
+        </th>
+        <th>
             @Html.DisplayNameFor(model => model.MemberId)
         </th>
-       
+
         <th>
             @Html.DisplayNameFor(model => model.UploadTime)
         </th>
-        
+
         <th>
             @Html.DisplayNameFor(model => model.DownloadTime)
         </th>
@@ -47,21 +50,24 @@
             @Html.DisplayFor(modelItem => item.AttachmentType)
         </td>
         <td>
+            @Html.DisplayFor(modelItem => item.AttachmentUse)
+        </td>
+        <td>
             @Html.DisplayName(IdentityHelper.GetMemberName(item.MemberId))
         </td>
-       
+
         <td>
             @Html.DisplayFor(modelItem => item.UploadTime)
         </td>
-        
+
         <td>
             @Html.DisplayFor(modelItem => item.DownloadTime)
         </td>
         <td>
-           
-            @Html.ActionLink("Details", "Details", new { id=item.AttachmentId }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.AttachmentId }) |
-            @Html.ActionLink("Download","Download", new { id = item.AttachmentId })
+
+            @Html.ActionLink("Details", "Details", new { id = item.AttachmentId }) |
+            @Html.ActionLink("Delete", "Delete", new { id = item.AttachmentId }) |
+            @Html.ActionLink("Download", "Download", new { id = item.AttachmentId })
 
         </td>
     </tr>

@@ -2,14 +2,14 @@
 @using IntelligenceCloud.Helpers
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "權限的細節";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Details</h2>
+<h2>權限的細節</h2>
 
 <div>
-    <h4>RoleAndFeatureViewModel</h4>
+    
     <hr />
     <div class="container">
        
@@ -21,47 +21,50 @@
                             @Html.DisplayFor(model => Model.FirstOrDefault().FirstOrDefault().Description)
                         </h3>
                     </div>
-                    
-                    
-                    
+
+
+
                 </div>
                 <table class="table">
-                   
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => Model.FirstOrDefault().FirstOrDefault().FeatureId)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => Model.FirstOrDefault().FirstOrDefault().ControllerName)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => Model.FirstOrDefault().FirstOrDefault().ActionName)
-                </th>
-            </tr>
-            @foreach (var feature in Model.FirstOrDefault())
-{
-            <tr>
-                <td>
-                    @Html.DisplayFor(model => feature.FeatureId)
 
-                </td>
-                <td>
-                    @Html.DisplayFor(model => feature.ControllerName)
-                </td>
-                <td>
-                    @Html.DisplayFor(model => feature.ActionName)
-                </td>
-            </tr>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => Model.FirstOrDefault().FirstOrDefault().FeatureId)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => Model.FirstOrDefault().FirstOrDefault().ControllerName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => Model.FirstOrDefault().FirstOrDefault().ActionName)
+                        </th>
+                    </tr>
+                    @foreach (var feature in Model.FirstOrDefault())
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(model => feature.FeatureId)
+
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => feature.ControllerName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => feature.ActionName)
+                    </td>
+                </tr>
 
 
-}
-            </table>
+    }
+                </table>
+
             </div>
+            @Html.ActionLink("編輯此權限的功能", "EditFeature", new { id = Model.FirstOrDefault().FirstOrDefault().RoleNum },
+           new { @class = "btn btn-default pull-right" })
         </div>
         
         
         <div class="well col-md-4 col-md-offset-1">
-            <h3>成員有此權限</h3>
+            <h3>擁有此權限的會員</h3>
             <dl>
 
                 <dt>
@@ -77,12 +80,14 @@
 
 
             </dl>
-            @Html.ActionLink("編輯此權限的會員", "EditMember", new { id = Model.FirstOrDefault().FirstOrDefault().RoleNum }, new {@class = "btn-primary" })
             
+                @Html.ActionLink("編輯此權限的會員", "EditMember", new { id = Model.FirstOrDefault().FirstOrDefault().RoleNum },
+                new { @class = "btn btn-default pull-right" })
+           
         </div>
     </div>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
-    @Html.ActionLink("Back to List", "Index")
+    
+    @Html.ActionLink("回到權限列表", "Index")
 </p>

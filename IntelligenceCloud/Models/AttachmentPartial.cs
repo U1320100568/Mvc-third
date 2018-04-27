@@ -17,6 +17,8 @@ namespace IntelligenceCloud.Models
             public string AttachmentName { get; set; }
             [Display(Name = "檔案類型")]
             public string AttachmentType { get; set; }
+            [Display(Name = "檔案用途類型")]
+            public string AttachmentUse { get; set; }
             [Display(Name = "擁有人")]
             public Nullable<int> MemberId { get; set; }
             [Display(Name = "上傳時間")]

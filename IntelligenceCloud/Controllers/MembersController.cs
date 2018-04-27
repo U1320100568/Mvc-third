@@ -89,7 +89,7 @@ namespace IntelligenceCloud.Controllers
         // GET: Members/Create
         [UserAuthorize]
         public ActionResult Create()
-        {
+        {   
             return View();
         }
 

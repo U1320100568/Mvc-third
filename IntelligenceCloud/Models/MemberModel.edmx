@@ -14,6 +14,7 @@
           <Property Name="AttachmentName" Type="nvarchar" MaxLength="60" />
           <Property Name="AttachmentOriginName" Type="nvarchar" MaxLength="50" />
           <Property Name="AttachmentType" Type="nvarchar" MaxLength="20" />
+          <Property Name="AttachmentUse" Type="nvarchar" MaxLength="20" />
           <Property Name="MemberId" Type="int" />
           <Property Name="isDeleted" Type="bit" />
           <Property Name="UploadTime" Type="datetime" />
@@ -28,6 +29,24 @@
           <Property Name="AttachmentId" Type="int" Nullable="false" />
           <Property Name="TimeDownload" Type="datetime" />
         </EntityType>
+        <EntityType Name="CommunRecord">
+          <Key>
+            <PropertyRef Name="CPhoneRecordId" />
+          </Key>
+          <Property Name="CPhoneRecordId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AttachmentId" Type="int" Nullable="false" />
+          <Property Name="IdCardNum" Type="nvarchar" MaxLength="20" />
+          <Property Name="CPhoneNum" Type="nvarchar" MaxLength="30" />
+          <Property Name="CCorrePhoneNum" Type="nvarchar" MaxLength="30" />
+          <Property Name="CThroughPhoneNum" Type="nvarchar" MaxLength="30" />
+          <Property Name="CType" Type="nvarchar" MaxLength="10" />
+          <Property Name="CStartTime" Type="datetime" />
+          <Property Name="CEndTime" Type="datetime" />
+          <Property Name="CIMEI" Type="nvarchar" MaxLength="20" />
+          <Property Name="CStationNum" Type="nvarchar" MaxLength="20" />
+          <Property Name="CStationAddress" Type="nvarchar" MaxLength="100" />
+          <Property Name="isDeleted" Type="bit" />
+        </EntityType>
         <EntityType Name="Member">
           <Key>
             <PropertyRef Name="MemberId" />
@@ -38,6 +57,14 @@
           <Property Name="MemberPwd" Type="nvarchar" MaxLength="20" Nullable="false" />
           <Property Name="RoleId" Type="int" />
           <Property Name="isDeleted" Type="bit" />
+        </EntityType>
+        <EntityType Name="People">
+          <Key>
+            <PropertyRef Name="PeopleId" />
+          </Key>
+          <Property Name="PeopleId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PeopleName" Type="nvarchar" MaxLength="30" />
+          <Property Name="IdCardNum" Type="nvarchar" MaxLength="20" />
         </EntityType>
         <EntityType Name="Role">
           <Key>
@@ -93,7 +120,9 @@
         <EntityContainer Name="IntelligenceCloudModelStoreContainer">
           <EntitySet Name="Attachment" EntityType="Self.Attachment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AttachmentRecord" EntityType="Self.AttachmentRecord" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CommunRecord" EntityType="Self.CommunRecord" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Member" EntityType="Self.Member" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="People" EntityType="Self.People" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RoleFeature" EntityType="Self.RoleFeature" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_AttachmentRecord_Attachment" Association="Self.FK_AttachmentRecord_Attachment">
@@ -111,12 +140,7 @@
       <Schema Namespace="IntelligenceCloudModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityContainer Name="IntelligenceCloudEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Member" EntityType="IntelligenceCloudModel.Member" />
-          <EntitySet Name="Attachment" EntityType="IntelligenceCloudModel.Attachment" />
           <EntitySet Name="AttachmentRecord" EntityType="IntelligenceCloudModel.AttachmentRecord" />
-          <AssociationSet Name="FK_AttachmentRecord_Attachment" Association="IntelligenceCloudModel.FK_AttachmentRecord_Attachment">
-            <End Role="Attachment" EntitySet="Attachment" />
-            <End Role="AttachmentRecord" EntitySet="AttachmentRecord" />
-          </AssociationSet>
           <EntitySet Name="Role" EntityType="IntelligenceCloudModel.Role" />
           <EntitySet Name="RoleFeature" EntityType="IntelligenceCloudModel.RoleFeature" />
           <AssociationSet Name="FK_Role_Member" Association="IntelligenceCloudModel.FK_Role_Member">
@@ -127,8 +151,15 @@
           <Parameter Name="MemberId" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetRoleAndMember" ReturnType="Collection(IntelligenceCloudModel.GetRoleAndMember_Result)">
-            <Parameter Name="RoleNum" Mode="In" Type="Int32" />
+          <Parameter Name="RoleNum" Mode="In" Type="Int32" />
           </FunctionImport>
+          <EntitySet Name="Attachment" EntityType="IntelligenceCloudModel.Attachment" />
+          <AssociationSet Name="FK_AttachmentRecord_Attachment" Association="IntelligenceCloudModel.FK_AttachmentRecord_Attachment">
+            <End Role="Attachment" EntitySet="Attachment" />
+            <End Role="AttachmentRecord" EntitySet="AttachmentRecord" />
+          </AssociationSet>
+          <EntitySet Name="People" EntityType="IntelligenceCloudModel.People" />
+          <EntitySet Name="CommunRecord" EntityType="IntelligenceCloudModel.CommunRecord" />
           </EntityContainer>
         <EntityType Name="Member">
           <Key>
@@ -142,22 +173,6 @@
           <Property Name="isDeleted" Type="Boolean" />
           <NavigationProperty Name="Role" Relationship="IntelligenceCloudModel.FK_Role_Member" FromRole="Member" ToRole="Role" />
         </EntityType>
-        <EntityType Name="Attachment">
-          <Key>
-            <PropertyRef Name="AttachmentId" />
-          </Key>
-          <Property Name="AttachmentId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="AttachmentPath" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="AttachmentName" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
-          <Property Name="AttachmentOriginName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="AttachmentType" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="MemberId" Type="Int32" />
-          <Property Name="isDeleted" Type="Boolean" />
-          <Property Name="UploadTime" Type="DateTime" Precision="3" />
-          <Property Name="DeletedTime" Type="DateTime" Precision="3" />
-          <Property Name="DownloadTime" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="AttachmentRecord" Relationship="IntelligenceCloudModel.FK_AttachmentRecord_Attachment" FromRole="Attachment" ToRole="AttachmentRecord" />
-          </EntityType>
         <EntityType Name="AttachmentRecord">
           <Key>
             <PropertyRef Name="AttachmentRecordId" />
@@ -167,18 +182,6 @@
           <Property Name="TimeDownload" Type="DateTime" Precision="3" />
           <NavigationProperty Name="Attachment" Relationship="IntelligenceCloudModel.FK_AttachmentRecord_Attachment" FromRole="AttachmentRecord" ToRole="Attachment" />
           </EntityType>
-        <Association Name="FK_AttachmentRecord_Attachment">
-          <End Type="IntelligenceCloudModel.Attachment" Role="Attachment" Multiplicity="1" />
-          <End Type="IntelligenceCloudModel.AttachmentRecord" Role="AttachmentRecord" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Attachment">
-              <PropertyRef Name="AttachmentId" />
-            </Principal>
-            <Dependent Role="AttachmentRecord">
-              <PropertyRef Name="AttachmentId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityType Name="Role">
           <Key>
             <PropertyRef Name="RoleId" />
@@ -231,6 +234,61 @@
           <Property Type="Boolean" Name="RoleLock" Nullable="true" />
           <Property Type="String" Name="Description" Nullable="true" MaxLength="30" />
         </ComplexType>
+        <EntityType Name="Attachment">
+          <Key>
+            <PropertyRef Name="AttachmentId" />
+          </Key>
+          <Property Name="AttachmentId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AttachmentPath" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="AttachmentName" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Name="AttachmentOriginName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AttachmentType" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="AttachmentUse" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="MemberId" Type="Int32" />
+          <Property Name="isDeleted" Type="Boolean" />
+          <Property Name="UploadTime" Type="DateTime" Precision="3" />
+          <Property Name="DeletedTime" Type="DateTime" Precision="3" />
+          <Property Name="DownloadTime" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="AttachmentRecord" Relationship="IntelligenceCloudModel.FK_AttachmentRecord_Attachment" FromRole="Attachment" ToRole="AttachmentRecord" />
+        </EntityType>
+        <Association Name="FK_AttachmentRecord_Attachment">
+          <End Type="IntelligenceCloudModel.Attachment" Role="Attachment" Multiplicity="1" />
+          <End Type="IntelligenceCloudModel.AttachmentRecord" Role="AttachmentRecord" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Attachment">
+              <PropertyRef Name="AttachmentId" />
+            </Principal>
+            <Dependent Role="AttachmentRecord">
+              <PropertyRef Name="AttachmentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="People">
+          <Key>
+            <PropertyRef Name="PeopleId" />
+          </Key>
+          <Property Name="PeopleId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PeopleName" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="IdCardNum" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="CommunRecord">
+          <Key>
+            <PropertyRef Name="CPhoneRecordId" />
+          </Key>
+          <Property Name="CPhoneRecordId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AttachmentId" Type="Int32" Nullable="false" />
+          <Property Name="IdCardNum" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="CPhoneNum" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="CCorrePhoneNum" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="CThroughPhoneNum" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="CType" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="CStartTime" Type="DateTime" Precision="3" />
+          <Property Name="CEndTime" Type="DateTime" Precision="3" />
+          <Property Name="CIMEI" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="CStationNum" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="CStationAddress" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="isDeleted" Type="Boolean" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -246,22 +304,6 @@
                 <ScalarProperty Name="MemberName" ColumnName="MemberName" />
                 <ScalarProperty Name="MemberAccount" ColumnName="MemberAccount" />
                 <ScalarProperty Name="MemberId" ColumnName="MemberId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Attachment">
-            <EntityTypeMapping TypeName="IntelligenceCloudModel.Attachment">
-              <MappingFragment StoreEntitySet="Attachment">
-                <ScalarProperty Name="DownloadTime" ColumnName="DownloadTime" />
-                <ScalarProperty Name="DeletedTime" ColumnName="DeletedTime" />
-                <ScalarProperty Name="UploadTime" ColumnName="UploadTime" />
-                <ScalarProperty Name="isDeleted" ColumnName="isDeleted" />
-                <ScalarProperty Name="MemberId" ColumnName="MemberId" />
-                <ScalarProperty Name="AttachmentType" ColumnName="AttachmentType" />
-                <ScalarProperty Name="AttachmentOriginName" ColumnName="AttachmentOriginName" />
-                <ScalarProperty Name="AttachmentName" ColumnName="AttachmentName" />
-                <ScalarProperty Name="AttachmentPath" ColumnName="AttachmentPath" />
-                <ScalarProperty Name="AttachmentId" ColumnName="AttachmentId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -323,6 +365,51 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <EntitySetMapping Name="Attachment">
+            <EntityTypeMapping TypeName="IntelligenceCloudModel.Attachment">
+              <MappingFragment StoreEntitySet="Attachment">
+                <ScalarProperty Name="DownloadTime" ColumnName="DownloadTime" />
+                <ScalarProperty Name="DeletedTime" ColumnName="DeletedTime" />
+                <ScalarProperty Name="UploadTime" ColumnName="UploadTime" />
+                <ScalarProperty Name="isDeleted" ColumnName="isDeleted" />
+                <ScalarProperty Name="MemberId" ColumnName="MemberId" />
+                <ScalarProperty Name="AttachmentUse" ColumnName="AttachmentUse" />
+                <ScalarProperty Name="AttachmentType" ColumnName="AttachmentType" />
+                <ScalarProperty Name="AttachmentOriginName" ColumnName="AttachmentOriginName" />
+                <ScalarProperty Name="AttachmentName" ColumnName="AttachmentName" />
+                <ScalarProperty Name="AttachmentPath" ColumnName="AttachmentPath" />
+                <ScalarProperty Name="AttachmentId" ColumnName="AttachmentId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="People">
+            <EntityTypeMapping TypeName="IntelligenceCloudModel.People">
+              <MappingFragment StoreEntitySet="People">
+                <ScalarProperty Name="IdCardNum" ColumnName="IdCardNum" />
+                <ScalarProperty Name="PeopleName" ColumnName="PeopleName" />
+                <ScalarProperty Name="PeopleId" ColumnName="PeopleId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CommunRecord">
+            <EntityTypeMapping TypeName="IntelligenceCloudModel.CommunRecord">
+              <MappingFragment StoreEntitySet="CommunRecord">
+                <ScalarProperty Name="isDeleted" ColumnName="isDeleted" />
+                <ScalarProperty Name="CStationAddress" ColumnName="CStationAddress" />
+                <ScalarProperty Name="CStationNum" ColumnName="CStationNum" />
+                <ScalarProperty Name="CIMEI" ColumnName="CIMEI" />
+                <ScalarProperty Name="CEndTime" ColumnName="CEndTime" />
+                <ScalarProperty Name="CStartTime" ColumnName="CStartTime" />
+                <ScalarProperty Name="CType" ColumnName="CType" />
+                <ScalarProperty Name="CThroughPhoneNum" ColumnName="CThroughPhoneNum" />
+                <ScalarProperty Name="CCorrePhoneNum" ColumnName="CCorrePhoneNum" />
+                <ScalarProperty Name="CPhoneNum" ColumnName="CPhoneNum" />
+                <ScalarProperty Name="IdCardNum" ColumnName="IdCardNum" />
+                <ScalarProperty Name="AttachmentId" ColumnName="AttachmentId" />
+                <ScalarProperty Name="CPhoneRecordId" ColumnName="CPhoneRecordId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

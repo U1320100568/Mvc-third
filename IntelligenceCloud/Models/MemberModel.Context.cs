@@ -28,10 +28,12 @@ namespace IntelligenceCloud.Models
         }
     
         public virtual DbSet<Member> Member { get; set; }
-        public virtual DbSet<Attachment> Attachment { get; set; }
         public virtual DbSet<AttachmentRecord> AttachmentRecord { get; set; }
         public virtual DbSet<Role> Role { get; set; }
         public virtual DbSet<RoleFeature> RoleFeature { get; set; }
+        public virtual DbSet<Attachment> Attachment { get; set; }
+        public virtual DbSet<People> People { get; set; }
+        public virtual DbSet<CommunRecord> CommunRecord { get; set; }
     
         public virtual ObjectResult<GetRoleAndFeature_Result> GetRoleAndFeature(Nullable<int> memberId)
         {

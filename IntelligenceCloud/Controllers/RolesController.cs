@@ -48,39 +48,18 @@ namespace IntelligenceCloud.Controllers
         {
 
             roleFeatureService.CreateRole(roleAndFeature);
-                
-            // TODO: Add insert logic here
-            
-           
             return RedirectToAction("Index");
             
         }
+
         public ActionResult GetPartialView()
         {
             return View("_PartialCreate");
         }
 
-        // GET: Roles/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
+        
 
-        // POST: Roles/Edit/5
-        [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add update logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
+       
         public ActionResult EditMember(int id)
         {
             //id = RoleNum
@@ -90,7 +69,8 @@ namespace IntelligenceCloud.Controllers
             //選擇要加入的會員
             var membersName =  members.GetAll()
                 .Select(column => new SelectListItem() { Text = column.MemberName, Value = column.MemberId.ToString(), Selected = false });
-            
+            var existedName = roleAndMember.Select(r =>  r.MemberId.ToString() );
+            membersName = membersName.Where(m => !existedName.Contains(m.Value));
             ViewBag.AssignMember = membersName;
 
             return View(roleAndMember);
@@ -124,31 +104,28 @@ namespace IntelligenceCloud.Controllers
 
         public ActionResult EditFeature(int id)
         {
-            return View();
+            //id = RoleNum
+            var feature = roleFeatureService.Search(f => f.RoleNum == id).ToList();
+            
+            return View(feature);
         }
 
-
-        // GET: Roles/Delete/5
-        public ActionResult Delete(int id)
+        public ActionResult DeleteFeature(int id)
         {
-            return View();
+            var feature = roleFeatureService.Get(f => f.FeatureId == id);
+            roleFeatureService.Delete(feature);
+            return RedirectToAction("EditFeature", new { id = feature.RoleNum });
         }
-
-        // POST: Roles/Delete/5
         [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateFeature(RoleFeature feature)
         {
-            try
-            {
-                // TODO: Add delete logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
+            roleFeatureService.Create(feature);
+            return RedirectToAction("EditFeature", new { id = feature.RoleNum });
         }
+
+
+        
         protected override void Dispose(bool disposing)
         {
             if (disposing)

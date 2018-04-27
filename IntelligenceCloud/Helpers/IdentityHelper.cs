@@ -13,7 +13,7 @@ namespace IntelligenceCloud.Helpers
     {
 
 
-        public static int? MemberId
+        public static int? UserId
         {
             get
             {
@@ -41,59 +41,35 @@ namespace IntelligenceCloud.Helpers
         {
             get
             {
-               if (MemberId == null)
+               if (UserId == null)
                 {
                     return string.Empty;
                 }
                 else {
-                    CrudRepository<Member> memberRepository = new CrudRepository<Member>();
-                    return memberRepository.Get(m => m.MemberId == MemberId ).MemberName;
+                    MemberService memberService= new MemberService();
+                    return memberService.Get(m => m.MemberId == UserId ).MemberName;
                     
                 }
             }
             
         }
 
-        public static Role GetFeature()
+        public static string GetMemberName(int? id)
         {
-            if (MemberId == null)
+            if(id != null)
             {
-                return new Role() {RoleLock =true };
+                MemberService memberService = new MemberService();
+                string name = memberService.Get(m => m.MemberId == id).MemberName;
+                return name;
             }
             else
-            {
-                CrudRepository<Role> roleRepository = new CrudRepository<Role>();
-                return  roleRepository.Get(r => r.MemberId == MemberId);
-                
-            }
-        }
-
-        public static string  GetAccessFeature()
-        {
-            if (MemberId == null)
             {
                 return string.Empty;
             }
-            else
-            {
-                CrudRepository<Role> roleRepository = new CrudRepository<Role>();
-                Role role = roleRepository.Get(r => r.MemberId == MemberId);
-
-                string stringWithout = "RoleId MemberId RoleLock isDeleted";
-                IEnumerable<PropertyInfo> propWithout = typeof(Role).GetProperties().Where(p => stringWithout.Contains(p.Name));
-                var props = typeof(Role).GetProperties().Except(propWithout);
-                foreach(var prop in props)
-                {
-                    if(prop.GetValue(role) as bool?== true)
-                    {
-                        return prop.Name;
-                    }
-                }
-                
-
-            }
-            return string.Empty;
+            
         }
+
+        
 
     }
 }

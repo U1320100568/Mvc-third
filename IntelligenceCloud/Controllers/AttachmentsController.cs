@@ -9,6 +9,7 @@ using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
 using IntelligenceCloud.Helpers;
+using IntelligenceCloud.Infrastructure;
 using IntelligenceCloud.Models;
 using IntelligenceCloud.Services;
 
@@ -16,54 +17,69 @@ namespace IntelligenceCloud.Controllers
 {
     public class AttachmentsController : Controller
     {
-        private AttachmentService AttachService;
+        private AttachmentService attachService;
 
         public AttachmentsController()
         {
-            AttachService = new AttachmentService();
+            attachService = new AttachmentService();
         }
         // GET: Attachments
+        [UserAuthorize]
         public ActionResult Index()
         {
             //return View(db.Attachment.ToList());
-            return View(AttachService.GetAll());
+            return View(attachService.GetAll());
+
         }
 
         // GET: Attachments/Details/5
         public ActionResult Details(int? id)
         {
             
-            Attachment attachment = AttachService.Get(a => a.AttachmentId == id);
+            Attachment attachment = attachService.Get(a => a.AttachmentId == id);
             if (attachment == null)
             {
                 return HttpNotFound();
             }
-            return View(attachment);
+            var viewModel = attachService.ShowExcelFile(attachment);
+            
+            return View(viewModel);
         }
 
+        
+
         // GET: Attachments/Create
+        [UserAuthorize]
         public ActionResult Create()
         {
+            var attachmentUse = new List<SelectListItem>();
+            attachmentUse.Add(new SelectListItem { Text = "通聯記錄", Value = "通聯記錄" });
+            attachmentUse.Add(new SelectListItem { Text = "Cellebrite UFED報告檔", Value = "Cellebrite UFED報告檔" });
+            ViewBag.attachmentUse = attachmentUse;
+
             return View();
         }
         
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Uploaded(AttachViewModel attachViewModel)
+        [UserAuthorize]
+        public ActionResult Create(AttachViewModel attachViewModel)
         {
+            
             if (attachViewModel.AttachFiles.Count() > 0)
             {
-                AttachService.CreateViewModelToDatabase(attachViewModel);
+                attachService.CreateViewModelToDatabase(attachViewModel);
+                
             }
             return RedirectToAction("Index");
         }
 
-        
+        [UserAuthorize]
         public ActionResult Download(int id)
         {
-            Attachment attachment = AttachService.Get(f => f.AttachmentId == id);
-            byte[] data = AttachService.Download(attachment);
+            Attachment attachment = attachService.Get(f => f.AttachmentId == id);
+            byte[] data = attachService.Download(attachment);
             if(data == null)
             {
                  return RedirectToAction("Index");
@@ -71,15 +87,16 @@ namespace IntelligenceCloud.Controllers
             }
             //更新下載時間
             attachment.DownloadTime = DateTime.Now;
-            AttachService.Update(attachment);
+            attachService.Update(attachment);
             return File(data, System.Net.Mime.MediaTypeNames.Application.Octet, attachment.AttachmentOriginName);
         }
 
         // GET: Attachments/Edit/5
+
         public ActionResult Edit(int? id)
         {
             
-            Attachment attachment = AttachService.Get(a => a.AttachmentId == id);
+            Attachment attachment = attachService.Get(a => a.AttachmentId == id);
             if (attachment == null)
             {
                 return HttpNotFound();
@@ -96,7 +113,7 @@ namespace IntelligenceCloud.Controllers
         {
             if (ModelState.IsValid)
             {
-                AttachService.Update(attachment);
+                attachService.Update(attachment);
                 return RedirectToAction("Index");
             }
             return View(attachment);
@@ -106,7 +123,7 @@ namespace IntelligenceCloud.Controllers
         public ActionResult Delete(int? id)
         {
 
-            Attachment attachment = AttachService.Get(a => a.AttachmentId == id);
+            Attachment attachment = attachService.Get(a => a.AttachmentId == id);
             if (attachment == null)
             {
                 return HttpNotFound();
@@ -119,11 +136,11 @@ namespace IntelligenceCloud.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Attachment attachment = AttachService.Get(a => a.AttachmentId == id);
+            Attachment attachment = attachService.Get(a => a.AttachmentId == id);
             //更新刪除時間
             attachment.DeletedTime = DateTime.Now;
-            AttachService.Update(attachment);
-            AttachService.Delete(attachment);
+            attachService.Update(attachment);
+            attachService.Delete(attachment);
 
             return RedirectToAction("Index");
         }
@@ -132,7 +149,7 @@ namespace IntelligenceCloud.Controllers
         {
             if (disposing)
             {
-                AttachService.Dispose();
+                attachService.Dispose();
             }
             base.Dispose(disposing);
         }

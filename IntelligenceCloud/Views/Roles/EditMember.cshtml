@@ -1,11 +1,11 @@
 ﻿@model IEnumerable<IntelligenceCloud.Models.Role>
 
 @{
-    ViewBag.Title = "EditMember";
+    ViewBag.Title = "編輯會員";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>EditMember</h2>
+<h2>編輯會員</h2>
 
 
 <table class="table">
@@ -63,20 +63,12 @@
     @Html.HiddenFor(model => model.FirstOrDefault().RoleNum);
     @Html.HiddenFor(model => model.FirstOrDefault().isDeleted);
     @Html.HiddenFor(model => model.FirstOrDefault().Description);
-<div class="btn-group" role="group">
-   
-    <div class="dropdown">
+<div class="btn-group pull-right" role="group">
+    <div class="dropdown ">
         @Html.DropDownListFor(model => model.FirstOrDefault().MemberId,
         new SelectList(ViewBag.AssignMember, "Value", "Text"), new { @class = "btn btn-default btn-group dropdown-toggle " })
         <input type="submit" value="增加會員" class="btn btn-default btn-group" />
     </div>
-    
-        
-    
 </div>
-    
-    
-    
-
 }
 @Html.ActionLink("回到權限頁面", "Details", new { id = Model.FirstOrDefault().RoleNum })

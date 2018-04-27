@@ -1,9 +1,13 @@
 ﻿using IntelligenceCloud.Helpers;
 using IntelligenceCloud.Models;
+using NPOI.HSSF.UserModel;
+using NPOI.SS.UserModel;
+using NPOI.XSSF.UserModel;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -26,12 +30,25 @@ namespace IntelligenceCloud.Services
             
             if(viewModel.AttachDetails != null)
             {
+                
                 foreach(var item in viewModel.AttachDetails)
                 {
                     Create(item);
+
+                    if (item.AttachmentUse == "通聯記錄")
+                    {
+                        using (CommunRecordService srv = new CommunRecordService())
+                        {
+                            srv.CreateExcelToDatabase(item);
+                        }
+                            
+                    }
                 }
             }
+
         }
+
+        
 
         //將檔案存到路徑下 
         public void SaveHttpPostFile(AttachViewModel viewModel, string storedFolder )
@@ -80,13 +97,13 @@ namespace IntelligenceCloud.Services
                             AttachmentOriginName = httpPost.FileName,
                             AttachmentPath = storedFolder,
                             AttachmentType = match.Success ? match.Value : "unknown",
+                            AttachmentUse = viewModel.AttachmentUse,
                             isDeleted = false,
                             MemberId = IdentityHelper.UserId,
                             UploadTime = DateTime.Now
                             
                         });
                         
-
                     }
                 }
 
@@ -97,6 +114,7 @@ namespace IntelligenceCloud.Services
             
         }
 
+        //下載到本機
         public byte[] Download(Attachment attach)
         {
             string filePath = Path.Combine(HttpContext.Current.Server.MapPath(attach.AttachmentPath), attach.AttachmentName);
@@ -126,5 +144,107 @@ namespace IntelligenceCloud.Services
 
             return data;
         }
+
+        
+        //將excel 存到list 給controller
+        public AttachSingleViewModel ShowExcelFile(Attachment attach)
+        {
+            FileStream fs = null;
+            //NPOI
+            IWorkbook workbook = null;
+            ISheet sheet = null;
+            IRow row = null;
+            ICell cell = null;
+            DataFormatter dataFormatter = new DataFormatter(CultureInfo.CurrentCulture);
+
+            //插入詳細資訊
+            AttachSingleViewModel viewModel = new AttachSingleViewModel() {
+                AttachDetail = attach
+            };
+            //2維列表
+            AttachXmlViewModel xmlViewModel = null;
+            AttachXmlRow rowViewModel = null;
+            //path
+            var physicalPath = HttpContext.Current.Server.MapPath(attach.AttachmentPath);
+            var path = Path.Combine(physicalPath, attach.AttachmentName);
+            
+            //圖片檔
+            Regex regex = new Regex(@"\.(jpg|jpeg|png|gif)$",RegexOptions.IgnoreCase);
+            if (regex.IsMatch(attach.AttachmentType ))
+            {
+                viewModel.AttahcFilePath = Path.Combine(attach.AttachmentPath, attach.AttachmentName);
+            }
+
+            try
+            {
+                //開啟現有檔案來讀取，存到資料串流
+                using (fs = File.OpenRead(path))
+                {
+                    //資料串流存到NPOI物件
+                    //新excel
+                    if (attach.AttachmentType == ".xlsx")
+                    {
+                        workbook = new XSSFWorkbook(fs);
+                    }
+                    ///舊excel
+                    if(attach.AttachmentType == ".xls")
+                    {
+                        workbook = new HSSFWorkbook(fs);
+                    }
+                    if(workbook != null)
+                    {
+                        sheet = workbook.GetSheetAt(0);     //NPOI sheet
+                        xmlViewModel = new AttachXmlViewModel();
+                        if(sheet != null)
+                        {
+                            int rowCount = sheet.LastRowNum;
+                            if (rowCount > 20) { rowCount = 20; }
+                            if(rowCount > 0)
+                            {
+                                IRow firstRow = sheet.GetRow(0);        //NPOI row
+                                int cellCount = firstRow.LastCellNum;
+                                
+                                for(int i = 0; i<rowCount; i++)
+                                {
+                                    row = sheet.GetRow(i);
+                                    if(row == null) { continue; }
+                                    rowViewModel = new AttachXmlRow();
+                                    for(int j = row.FirstCellNum; j < cellCount; j++)
+                                    {
+                                        cell = row.GetCell(j);      //NPOI column
+                                        if(cell == null)
+                                        {
+                                            rowViewModel.XmlRow.Add("");
+                                        }
+                                        else
+                                        {
+                                            rowViewModel.XmlRow.Add(dataFormatter.FormatCellValue(cell));
+                                        }
+
+                                    }
+
+                                    //插入列表 row
+                                    xmlViewModel.Table.Add(rowViewModel);
+                                }
+                            }
+                        }
+                    }
+                    //插入整個列表
+                    viewModel.AttachFile = xmlViewModel;
+                    return viewModel;
+                }
+            }
+            catch(Exception e)
+            {
+                if(fs != null)
+                {
+                    fs.Close();
+                }
+                return viewModel;
+            }
+
+        }
+
+        
     }
 }
