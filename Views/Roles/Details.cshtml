@@ -1,0 +1,93 @@
+﻿@model IQueryable<IGrouping<int,IntelligenceCloud.Models.RoleAndFeatureViewModel>>
+@using IntelligenceCloud.Helpers
+
+@{
+    ViewBag.Title = "權限的細節";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>權限的細節</h2>
+
+<div>
+    
+    <hr />
+    <div class="container">
+       
+        <div class="well col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-title">
+                    <div class="text-center">
+                        <h3>
+                            @Html.DisplayFor(model => Model.FirstOrDefault().FirstOrDefault().Description)
+                        </h3>
+                    </div>
+
+
+
+                </div>
+                <table class="table">
+
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => Model.FirstOrDefault().FirstOrDefault().FeatureId)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => Model.FirstOrDefault().FirstOrDefault().ControllerName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => Model.FirstOrDefault().FirstOrDefault().ActionName)
+                        </th>
+                    </tr>
+                    @foreach (var feature in Model.FirstOrDefault())
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(model => feature.FeatureId)
+
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => feature.ControllerName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => feature.ActionName)
+                    </td>
+                </tr>
+
+
+    }
+                </table>
+
+            </div>
+            @Html.ActionLink("編輯此權限的功能", "EditFeature", new { id = Model.FirstOrDefault().FirstOrDefault().RoleNum },
+           new { @class = "btn btn-default pull-right" })
+        </div>
+        
+        
+        <div class="well col-md-4 col-md-offset-1">
+            <h3>擁有此權限的會員</h3>
+            <dl>
+
+                <dt>
+                    @Html.DisplayNameFor(model => Model.FirstOrDefault().FirstOrDefault().MemberId)
+                </dt>
+                @foreach (var member in Model)
+        {
+            <dd>
+                @Html.DisplayName(IdentityHelper.GetMemberName(member.FirstOrDefault().MemberId))
+            </dd>
+
+}
+
+
+            </dl>
+            
+                @Html.ActionLink("編輯此權限的會員", "EditMember", new { id = Model.FirstOrDefault().FirstOrDefault().RoleNum },
+                new { @class = "btn btn-default pull-right" })
+           
+        </div>
+    </div>
+</div>
+<p>
+    
+    @Html.ActionLink("回到權限列表", "Index")
+</p>

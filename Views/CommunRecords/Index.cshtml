@@ -1,0 +1,91 @@
+﻿@model IEnumerable<IntelligenceCloud.Models.CommunRecord>
+
+
+
+@{
+    ViewBag.Title = "CommunRecord";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>CommunRecord</h2>
+<div class="pull-right">
+    @Html.PagedListPager((IPagedList)Model, x => Url.Action("Index", new { page = x }))
+
+    @Html.ActionLink("下載資料庫的檔案", "Download", "CommunRecords", new { id = Model.FirstOrDefault().AttachmentId }, new { @class = "btn btn-default pull-right" })
+</div>
+
+<table class="table">
+    <tr>
+
+
+        <th>
+            @Html.DisplayNameFor(model => model.CPhoneNum)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CCorrePhoneNum)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CThroughPhoneNum)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CType)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CStartTime)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CEndTime)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CIMEI)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CStationNum)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CStationAddress)
+        </th>
+        
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.CPhoneNum)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CCorrePhoneNum)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CThroughPhoneNum)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CStartTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CEndTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CIMEI)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CStationNum)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CStationAddress)
+            </td>
+            
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.CPhoneRecordId }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.CPhoneRecordId })
+            </td>
+        </tr>
+    }
+
+</table>
+@Html.ActionLink("返回檔案詳細", "Details", "Attachments", new { id = Model.FirstOrDefault().AttachmentId },"")

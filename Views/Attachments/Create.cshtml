@@ -1,0 +1,51 @@
+﻿@*@model IntelligenceCloud.Models.Attachment
+*@
+@model IntelligenceCloud.Models.AttachViewModel
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Create</h2>
+
+@*因為要上傳檔案encrtype*@
+@using (Html.BeginForm("Create", "Attachments", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    @*因為上傳多個檔案，使用html5 multiple屬性*@
+    <div class="btn-group " role="group">
+        <div class="btn-group" role="group">
+            <input type="file" name="AttachFiles" multiple class="btn btn-default " />
+        </div>
+        <div class="btn-group" role="group">
+            @Html.DropDownListFor(u => Model.AttachmentUse, new SelectList(ViewBag.attachmentUse, "Value", "Text"),
+           "選擇檔案類型" ,new { @class = "btn btn-default dropdown-toggle"  })
+        </div>
+        <div class="btn-group" role="group">
+            <input type="submit" value="上傳" class="btn  btn-default" />
+        </div>
+    </div>
+}
+
+
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var highestBtn = 0;
+            $('.btn-group .btn').each(function () {
+                if ($(this).height() > highestBtn) {
+                    highestBtn = $(this).height();
+                }
+            });
+            $('.btn-group .btn').height(highestBtn);
+        })
+
+    </script>
+}

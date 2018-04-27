@@ -1,0 +1,74 @@
+﻿@model IEnumerable<IntelligenceCloud.Models.Role>
+
+@{
+    ViewBag.Title = "編輯會員";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>編輯會員</h2>
+
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.RoleNum)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RoleLock)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.isDeleted)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Member.MemberAccount)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.RoleNum)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RoleLock)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.isDeleted)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Member.MemberAccount)
+            </td>
+            <td>
+                @Html.ActionLink("Lock", "LockMember", new { id = item.RoleId }) |
+
+                @Html.ActionLink("Delete", "DeleteMember", new { id = item.RoleId })
+            </td>
+        </tr>
+    }
+
+</table>
+
+@using (Html.BeginForm("CreateMember", "Roles", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.FirstOrDefault().RoleLock);
+    @Html.HiddenFor(model => model.FirstOrDefault().RoleNum);
+    @Html.HiddenFor(model => model.FirstOrDefault().isDeleted);
+    @Html.HiddenFor(model => model.FirstOrDefault().Description);
+<div class="btn-group pull-right" role="group">
+    <div class="dropdown ">
+        @Html.DropDownListFor(model => model.FirstOrDefault().MemberId,
+        new SelectList(ViewBag.AssignMember, "Value", "Text"), new { @class = "btn btn-default btn-group dropdown-toggle " })
+        <input type="submit" value="增加會員" class="btn btn-default btn-group" />
+    </div>
+</div>
+}
+@Html.ActionLink("回到權限頁面", "Details", new { id = Model.FirstOrDefault().RoleNum })

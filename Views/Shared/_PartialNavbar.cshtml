@@ -1,0 +1,48 @@
+﻿@using IntelligenceCloud.Helpers
+
+<ul class="nav navbar-nav">
+
+
+    @if (FeatureHelper.GetFeature(IdentityHelper.UserId) != null)
+    {
+        <li>@IdentityHelper.UserId</li>
+        foreach (var feature in FeatureHelper.GetFeature(IdentityHelper.UserId))
+        {
+            <li>@Html.ActionLink(feature.Description, "Index", feature.ControllerName)</li>
+        }
+    }
+
+
+
+
+    <li>@Html.ActionLink("附件", "Index", "Attachments")</li>
+    <li>@Html.ActionLink("權限設定", "Index", "Roles")</li>
+    <li>@Html.ActionLink("會員", "Index", "Members")</li>
+    @**@
+
+
+    @if (User.Identity.IsAuthenticated)
+    {
+        <li>@Html.ActionLink("登出", "Logout", "Home")</li>
+    }
+    else
+    {
+        <li>@Html.ActionLink("登入", "Login", "Home")</li>
+    }
+
+    @*<li>@Html.ActionLink("會員", "Index", "Members")</li>
+        <li>@Html.ActionLink("登出", "Logout", "Home")</li>
+        <li>@Html.ActionLink("登入", "Login", "Home")</li>*@
+
+
+</ul>
+@if (IdentityHelper.UserName != string.Empty)
+{
+    <ul class="nav navbar-nav navbar-right">
+        <li>@Html.ActionLink(IdentityHelper.UserName, "#","",new { onclick = "return false" }) 
+        
+        </li>
+        
+    </ul>
+}
+    

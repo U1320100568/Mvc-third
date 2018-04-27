@@ -1,0 +1,436 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="IntelligenceCloudModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Attachment">
+          <Key>
+            <PropertyRef Name="AttachmentId" />
+          </Key>
+          <Property Name="AttachmentId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AttachmentPath" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="AttachmentName" Type="nvarchar" MaxLength="60" />
+          <Property Name="AttachmentOriginName" Type="nvarchar" MaxLength="50" />
+          <Property Name="AttachmentType" Type="nvarchar" MaxLength="20" />
+          <Property Name="AttachmentUse" Type="nvarchar" MaxLength="20" />
+          <Property Name="MemberId" Type="int" />
+          <Property Name="isDeleted" Type="bit" />
+          <Property Name="UploadTime" Type="datetime" />
+          <Property Name="DeletedTime" Type="datetime" />
+          <Property Name="DownloadTime" Type="datetime" />
+        </EntityType>
+        <EntityType Name="AttachmentRecord">
+          <Key>
+            <PropertyRef Name="AttachmentRecordId" />
+          </Key>
+          <Property Name="AttachmentRecordId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AttachmentId" Type="int" Nullable="false" />
+          <Property Name="TimeDownload" Type="datetime" />
+        </EntityType>
+        <EntityType Name="CommunRecord">
+          <Key>
+            <PropertyRef Name="CPhoneRecordId" />
+          </Key>
+          <Property Name="CPhoneRecordId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AttachmentId" Type="int" Nullable="false" />
+          <Property Name="IdCardNum" Type="nvarchar" MaxLength="20" />
+          <Property Name="CPhoneNum" Type="nvarchar" MaxLength="30" />
+          <Property Name="CCorrePhoneNum" Type="nvarchar" MaxLength="30" />
+          <Property Name="CThroughPhoneNum" Type="nvarchar" MaxLength="30" />
+          <Property Name="CType" Type="nvarchar" MaxLength="10" />
+          <Property Name="CStartTime" Type="datetime" />
+          <Property Name="CEndTime" Type="datetime" />
+          <Property Name="CIMEI" Type="nvarchar" MaxLength="20" />
+          <Property Name="CStationNum" Type="nvarchar" MaxLength="20" />
+          <Property Name="CStationAddress" Type="nvarchar" MaxLength="100" />
+          <Property Name="isDeleted" Type="bit" />
+        </EntityType>
+        <EntityType Name="Member">
+          <Key>
+            <PropertyRef Name="MemberId" />
+          </Key>
+          <Property Name="MemberId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MemberAccount" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="MemberName" Type="nvarchar" MaxLength="20" />
+          <Property Name="MemberPwd" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="RoleId" Type="int" />
+          <Property Name="isDeleted" Type="bit" />
+        </EntityType>
+        <EntityType Name="People">
+          <Key>
+            <PropertyRef Name="PeopleId" />
+          </Key>
+          <Property Name="PeopleId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PeopleName" Type="nvarchar" MaxLength="30" />
+          <Property Name="IdCardNum" Type="nvarchar" MaxLength="20" />
+        </EntityType>
+        <EntityType Name="Role">
+          <Key>
+            <PropertyRef Name="RoleId" />
+          </Key>
+          <Property Name="RoleId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RoleNum" Type="int" />
+          <Property Name="MemberId" Type="int" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="30" />
+          <Property Name="RoleLock" Type="bit" />
+          <Property Name="isDeleted" Type="bit" />
+        </EntityType>
+        <EntityType Name="RoleFeature">
+          <Key>
+            <PropertyRef Name="FeatureId" />
+          </Key>
+          <Property Name="FeatureId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RoleNum" Type="int" Nullable="false" />
+          <Property Name="ControllerName" Type="nvarchar" MaxLength="40" />
+          <Property Name="ActionName" Type="nvarchar" MaxLength="40" />
+          <Property Name="isDeleted" Type="bit" />
+        </EntityType>
+        <Association Name="FK_AttachmentRecord_Attachment">
+          <End Role="Attachment" Type="Self.Attachment" Multiplicity="1" />
+          <End Role="AttachmentRecord" Type="Self.AttachmentRecord" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Attachment">
+              <PropertyRef Name="AttachmentId" />
+            </Principal>
+            <Dependent Role="AttachmentRecord">
+              <PropertyRef Name="AttachmentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Role_Member">
+          <End Role="Member" Type="Self.Member" Multiplicity="1" />
+          <End Role="Role" Type="Self.Role" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Member">
+              <PropertyRef Name="MemberId" />
+            </Principal>
+            <Dependent Role="Role">
+              <PropertyRef Name="MemberId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="GetRoleAndFeature" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="MemberId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="GetRoleAndMember" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="RoleNum" Type="int" Mode="In" />
+        </Function>
+        <EntityContainer Name="IntelligenceCloudModelStoreContainer">
+          <EntitySet Name="Attachment" EntityType="Self.Attachment" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AttachmentRecord" EntityType="Self.AttachmentRecord" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CommunRecord" EntityType="Self.CommunRecord" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Member" EntityType="Self.Member" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="People" EntityType="Self.People" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RoleFeature" EntityType="Self.RoleFeature" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_AttachmentRecord_Attachment" Association="Self.FK_AttachmentRecord_Attachment">
+            <End Role="Attachment" EntitySet="Attachment" />
+            <End Role="AttachmentRecord" EntitySet="AttachmentRecord" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Role_Member" Association="Self.FK_Role_Member">
+            <End Role="Member" EntitySet="Member" />
+            <End Role="Role" EntitySet="Role" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="IntelligenceCloudModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="IntelligenceCloudEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Member" EntityType="IntelligenceCloudModel.Member" />
+          <EntitySet Name="AttachmentRecord" EntityType="IntelligenceCloudModel.AttachmentRecord" />
+          <EntitySet Name="Role" EntityType="IntelligenceCloudModel.Role" />
+          <EntitySet Name="RoleFeature" EntityType="IntelligenceCloudModel.RoleFeature" />
+          <AssociationSet Name="FK_Role_Member" Association="IntelligenceCloudModel.FK_Role_Member">
+            <End Role="Member" EntitySet="Member" />
+            <End Role="Role" EntitySet="Role" />
+          </AssociationSet>
+          <FunctionImport Name="GetRoleAndFeature" ReturnType="Collection(IntelligenceCloudModel.GetRoleAndFeature_Result)">
+          <Parameter Name="MemberId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="GetRoleAndMember" ReturnType="Collection(IntelligenceCloudModel.GetRoleAndMember_Result)">
+          <Parameter Name="RoleNum" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <EntitySet Name="Attachment" EntityType="IntelligenceCloudModel.Attachment" />
+          <AssociationSet Name="FK_AttachmentRecord_Attachment" Association="IntelligenceCloudModel.FK_AttachmentRecord_Attachment">
+            <End Role="Attachment" EntitySet="Attachment" />
+            <End Role="AttachmentRecord" EntitySet="AttachmentRecord" />
+          </AssociationSet>
+          <EntitySet Name="People" EntityType="IntelligenceCloudModel.People" />
+          <EntitySet Name="CommunRecord" EntityType="IntelligenceCloudModel.CommunRecord" />
+          </EntityContainer>
+        <EntityType Name="Member">
+          <Key>
+            <PropertyRef Name="MemberId" />
+          </Key>
+          <Property Name="MemberId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MemberAccount" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="MemberName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="MemberPwd" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="RoleId" Type="Int32" />
+          <Property Name="isDeleted" Type="Boolean" />
+          <NavigationProperty Name="Role" Relationship="IntelligenceCloudModel.FK_Role_Member" FromRole="Member" ToRole="Role" />
+        </EntityType>
+        <EntityType Name="AttachmentRecord">
+          <Key>
+            <PropertyRef Name="AttachmentRecordId" />
+          </Key>
+          <Property Name="AttachmentRecordId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AttachmentId" Type="Int32" Nullable="false" />
+          <Property Name="TimeDownload" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Attachment" Relationship="IntelligenceCloudModel.FK_AttachmentRecord_Attachment" FromRole="AttachmentRecord" ToRole="Attachment" />
+          </EntityType>
+        <EntityType Name="Role">
+          <Key>
+            <PropertyRef Name="RoleId" />
+          </Key>
+          <Property Name="RoleId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RoleNum" Type="Int32" />
+          <Property Name="MemberId" Type="Int32" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="RoleLock" Type="Boolean" />
+          <Property Name="isDeleted" Type="Boolean" />
+          <NavigationProperty Name="Member" Relationship="IntelligenceCloudModel.FK_Role_Member" FromRole="Role" ToRole="Member" />
+        </EntityType>
+        <EntityType Name="RoleFeature">
+          <Key>
+            <PropertyRef Name="FeatureId" />
+          </Key>
+          <Property Name="FeatureId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RoleNum" Type="Int32" Nullable="false" />
+          <Property Name="ControllerName" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
+          <Property Name="ActionName" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
+          <Property Name="isDeleted" Type="Boolean" />
+        </EntityType>
+        <Association Name="FK_Role_Member">
+          <End Type="IntelligenceCloudModel.Member" Role="Member" Multiplicity="1" />
+          <End Type="IntelligenceCloudModel.Role" Role="Role" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Member">
+              <PropertyRef Name="MemberId" />
+            </Principal>
+            <Dependent Role="Role">
+              <PropertyRef Name="MemberId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <ComplexType Name="GetRoleAndFeature_Result">
+          <Property Type="Int32" Name="FeatureId" Nullable="true" />
+          <Property Type="Int32" Name="RoleNum" Nullable="true" />
+          <Property Type="Int32" Name="MemberId" Nullable="true" />
+          <Property Type="String" Name="ControllerName" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="ActionName" Nullable="true" MaxLength="40" />
+          <Property Type="Boolean" Name="RoleLock" Nullable="true" />
+          <Property Type="String" Name="Description" Nullable="true" MaxLength="30" />
+        </ComplexType>
+        <ComplexType Name="GetRoleAndMember_Result">
+          <Property Type="Int32" Name="FeatureId" Nullable="true" />
+          <Property Type="Int32" Name="RoleNum" Nullable="true" />
+          <Property Type="Int32" Name="MemberId" Nullable="true" />
+          <Property Type="String" Name="ControllerName" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="ActionName" Nullable="true" MaxLength="40" />
+          <Property Type="Boolean" Name="RoleLock" Nullable="true" />
+          <Property Type="String" Name="Description" Nullable="true" MaxLength="30" />
+        </ComplexType>
+        <EntityType Name="Attachment">
+          <Key>
+            <PropertyRef Name="AttachmentId" />
+          </Key>
+          <Property Name="AttachmentId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AttachmentPath" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="AttachmentName" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Name="AttachmentOriginName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AttachmentType" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="AttachmentUse" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="MemberId" Type="Int32" />
+          <Property Name="isDeleted" Type="Boolean" />
+          <Property Name="UploadTime" Type="DateTime" Precision="3" />
+          <Property Name="DeletedTime" Type="DateTime" Precision="3" />
+          <Property Name="DownloadTime" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="AttachmentRecord" Relationship="IntelligenceCloudModel.FK_AttachmentRecord_Attachment" FromRole="Attachment" ToRole="AttachmentRecord" />
+        </EntityType>
+        <Association Name="FK_AttachmentRecord_Attachment">
+          <End Type="IntelligenceCloudModel.Attachment" Role="Attachment" Multiplicity="1" />
+          <End Type="IntelligenceCloudModel.AttachmentRecord" Role="AttachmentRecord" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Attachment">
+              <PropertyRef Name="AttachmentId" />
+            </Principal>
+            <Dependent Role="AttachmentRecord">
+              <PropertyRef Name="AttachmentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="People">
+          <Key>
+            <PropertyRef Name="PeopleId" />
+          </Key>
+          <Property Name="PeopleId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PeopleName" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="IdCardNum" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="CommunRecord">
+          <Key>
+            <PropertyRef Name="CPhoneRecordId" />
+          </Key>
+          <Property Name="CPhoneRecordId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AttachmentId" Type="Int32" Nullable="false" />
+          <Property Name="IdCardNum" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="CPhoneNum" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="CCorrePhoneNum" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="CThroughPhoneNum" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="CType" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="CStartTime" Type="DateTime" Precision="3" />
+          <Property Name="CEndTime" Type="DateTime" Precision="3" />
+          <Property Name="CIMEI" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="CStationNum" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="CStationAddress" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="isDeleted" Type="Boolean" />
+        </EntityType>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="IntelligenceCloudModelStoreContainer" CdmEntityContainer="IntelligenceCloudEntities">
+          <EntitySetMapping Name="Member">
+            <EntityTypeMapping TypeName="IntelligenceCloudModel.Member">
+              <MappingFragment StoreEntitySet="Member">
+                <ScalarProperty Name="isDeleted" ColumnName="isDeleted" />
+                <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+                <ScalarProperty Name="MemberPwd" ColumnName="MemberPwd" />
+                <ScalarProperty Name="MemberName" ColumnName="MemberName" />
+                <ScalarProperty Name="MemberAccount" ColumnName="MemberAccount" />
+                <ScalarProperty Name="MemberId" ColumnName="MemberId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AttachmentRecord">
+            <EntityTypeMapping TypeName="IntelligenceCloudModel.AttachmentRecord">
+              <MappingFragment StoreEntitySet="AttachmentRecord">
+                <ScalarProperty Name="TimeDownload" ColumnName="TimeDownload" />
+                <ScalarProperty Name="AttachmentId" ColumnName="AttachmentId" />
+                <ScalarProperty Name="AttachmentRecordId" ColumnName="AttachmentRecordId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Role">
+            <EntityTypeMapping TypeName="IntelligenceCloudModel.Role">
+              <MappingFragment StoreEntitySet="Role">
+                <ScalarProperty Name="isDeleted" ColumnName="isDeleted" />
+                <ScalarProperty Name="RoleLock" ColumnName="RoleLock" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="MemberId" ColumnName="MemberId" />
+                <ScalarProperty Name="RoleNum" ColumnName="RoleNum" />
+                <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RoleFeature">
+            <EntityTypeMapping TypeName="IntelligenceCloudModel.RoleFeature">
+              <MappingFragment StoreEntitySet="RoleFeature">
+                <ScalarProperty Name="isDeleted" ColumnName="isDeleted" />
+                <ScalarProperty Name="ActionName" ColumnName="ActionName" />
+                <ScalarProperty Name="ControllerName" ColumnName="ControllerName" />
+                <ScalarProperty Name="RoleNum" ColumnName="RoleNum" />
+                <ScalarProperty Name="FeatureId" ColumnName="FeatureId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="GetRoleAndFeature" FunctionName="IntelligenceCloudModel.Store.GetRoleAndFeature">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IntelligenceCloudModel.GetRoleAndFeature_Result">
+                <ScalarProperty Name="FeatureId" ColumnName="FeatureId" />
+                <ScalarProperty Name="RoleNum" ColumnName="RoleNum" />
+                <ScalarProperty Name="MemberId" ColumnName="MemberId" />
+                <ScalarProperty Name="ControllerName" ColumnName="ControllerName" />
+                <ScalarProperty Name="ActionName" ColumnName="ActionName" />
+                <ScalarProperty Name="RoleLock" ColumnName="RoleLock" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetRoleAndMember" FunctionName="IntelligenceCloudModel.Store.GetRoleAndMember">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IntelligenceCloudModel.GetRoleAndMember_Result">
+                <ScalarProperty Name="FeatureId" ColumnName="FeatureId" />
+                <ScalarProperty Name="RoleNum" ColumnName="RoleNum" />
+                <ScalarProperty Name="MemberId" ColumnName="MemberId" />
+                <ScalarProperty Name="ControllerName" ColumnName="ControllerName" />
+                <ScalarProperty Name="ActionName" ColumnName="ActionName" />
+                <ScalarProperty Name="RoleLock" ColumnName="RoleLock" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="Attachment">
+            <EntityTypeMapping TypeName="IntelligenceCloudModel.Attachment">
+              <MappingFragment StoreEntitySet="Attachment">
+                <ScalarProperty Name="DownloadTime" ColumnName="DownloadTime" />
+                <ScalarProperty Name="DeletedTime" ColumnName="DeletedTime" />
+                <ScalarProperty Name="UploadTime" ColumnName="UploadTime" />
+                <ScalarProperty Name="isDeleted" ColumnName="isDeleted" />
+                <ScalarProperty Name="MemberId" ColumnName="MemberId" />
+                <ScalarProperty Name="AttachmentUse" ColumnName="AttachmentUse" />
+                <ScalarProperty Name="AttachmentType" ColumnName="AttachmentType" />
+                <ScalarProperty Name="AttachmentOriginName" ColumnName="AttachmentOriginName" />
+                <ScalarProperty Name="AttachmentName" ColumnName="AttachmentName" />
+                <ScalarProperty Name="AttachmentPath" ColumnName="AttachmentPath" />
+                <ScalarProperty Name="AttachmentId" ColumnName="AttachmentId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="People">
+            <EntityTypeMapping TypeName="IntelligenceCloudModel.People">
+              <MappingFragment StoreEntitySet="People">
+                <ScalarProperty Name="IdCardNum" ColumnName="IdCardNum" />
+                <ScalarProperty Name="PeopleName" ColumnName="PeopleName" />
+                <ScalarProperty Name="PeopleId" ColumnName="PeopleId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CommunRecord">
+            <EntityTypeMapping TypeName="IntelligenceCloudModel.CommunRecord">
+              <MappingFragment StoreEntitySet="CommunRecord">
+                <ScalarProperty Name="isDeleted" ColumnName="isDeleted" />
+                <ScalarProperty Name="CStationAddress" ColumnName="CStationAddress" />
+                <ScalarProperty Name="CStationNum" ColumnName="CStationNum" />
+                <ScalarProperty Name="CIMEI" ColumnName="CIMEI" />
+                <ScalarProperty Name="CEndTime" ColumnName="CEndTime" />
+                <ScalarProperty Name="CStartTime" ColumnName="CStartTime" />
+                <ScalarProperty Name="CType" ColumnName="CType" />
+                <ScalarProperty Name="CThroughPhoneNum" ColumnName="CThroughPhoneNum" />
+                <ScalarProperty Name="CCorrePhoneNum" ColumnName="CCorrePhoneNum" />
+                <ScalarProperty Name="CPhoneNum" ColumnName="CPhoneNum" />
+                <ScalarProperty Name="IdCardNum" ColumnName="IdCardNum" />
+                <ScalarProperty Name="AttachmentId" ColumnName="AttachmentId" />
+                <ScalarProperty Name="CPhoneRecordId" ColumnName="CPhoneRecordId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="無" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
