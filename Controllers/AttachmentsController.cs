@@ -84,7 +84,7 @@ namespace IntelligenceCloud.Controllers
             {
                  return RedirectToAction("Index");
 
-            }
+            }   
             //更新下載時間
             attachment.DownloadTime = DateTime.Now;
             attachService.Update(attachment);

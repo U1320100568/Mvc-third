@@ -34,6 +34,8 @@ namespace IntelligenceCloud.Models
         public virtual DbSet<Attachment> Attachment { get; set; }
         public virtual DbSet<People> People { get; set; }
         public virtual DbSet<CommunRecord> CommunRecord { get; set; }
+        public virtual DbSet<ForensicSMS> ForensicSMS { get; set; }
+        public virtual DbSet<ForensicContact> ForensicContact { get; set; }
     
         public virtual ObjectResult<GetRoleAndFeature_Result> GetRoleAndFeature(Nullable<int> memberId)
         {

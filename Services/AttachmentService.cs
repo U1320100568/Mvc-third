@@ -37,11 +37,18 @@ namespace IntelligenceCloud.Services
 
                     if (item.AttachmentUse == "通聯記錄")
                     {
-                        using (CommunRecordService srv = new CommunRecordService())
-                        {
-                            srv.CreateExcelToDatabase(item);
-                        }
-                            
+                        
+                        CommunRecordService srv = new CommunRecordService();
+                        srv.Import(item);
+
+                    }
+                    if (item.AttachmentUse == "Cellebrite UFED報告檔")
+                    {
+                        
+                        ForensicService srv = new ForensicService();
+                        srv.Import(item);
+
+
                     }
                 }
             }

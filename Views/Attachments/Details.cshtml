@@ -99,12 +99,14 @@
 
         </div>
             @if (Model.AttachDetail.AttachmentUse == "通聯記錄")
-    {
-        <div class="col-xs-6">
-            @Html.ActionLink("觀看資料庫的檔案", "Index", "CommunRecords", new { id = Model.AttachDetail.AttachmentId }, new { @class = "btn btn-default pull-right" })
-
-        </div>
-}
+            {
+            <div class="col-xs-6 " >
+                <div class="btn-group btn-group-vertical pull-right">
+                @Html.ActionLink("觀看資料庫的檔案", "Index", "CommunRecords", new { id = Model.AttachDetail.AttachmentId }, new { @class = "btn btn-default pull-right" })
+                @Html.ActionLink("下載資料庫的檔案", "Download", "CommunRecords", new { id = Model.AttachDetail.AttachmentId }, new { @class = "btn btn-default pull-right" })
+                </div>
+             </div>
+            }
         </div>
 </div>
 

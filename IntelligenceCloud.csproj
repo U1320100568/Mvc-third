@@ -176,6 +176,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AttachmentsController.cs" />
     <Compile Include="Controllers\CommunRecordsController.cs" />
+    <Compile Include="Controllers\ForensicsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MembersController.cs" />
     <Compile Include="Controllers\RolesController.cs" />
@@ -185,11 +186,18 @@
     <Compile Include="Helpers\ExpressionHelper.cs" />
     <Compile Include="Helpers\FeatureHelper.cs" />
     <Compile Include="Helpers\IdentityHelper.cs" />
+    <Compile Include="Helpers\ParseHelper.cs" />
     <Compile Include="Infrastructure\UserAuthorize.cs" />
     <Compile Include="Models\Attachment.cs">
       <DependentUpon>MemberModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\AttachmentPartial.cs" />
+    <Compile Include="Models\ForensicContact.cs">
+      <DependentUpon>MemberModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ForensicSMS.cs">
+      <DependentUpon>MemberModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Partial\AttachmentPartial.cs" />
     <Compile Include="Models\AttachmentRecord.cs">
       <DependentUpon>MemberModel.tt</DependentUpon>
     </Compile>
@@ -197,8 +205,8 @@
     <Compile Include="Models\CommunRecord.cs">
       <DependentUpon>MemberModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\CommunRecordPartial.cs" />
-    <Compile Include="Models\EntitiesPartial.cs" />
+    <Compile Include="Models\Partial\CommunRecordPartial.cs" />
+    <Compile Include="Models\Partial\EntitiesPartial.cs" />
     <Compile Include="Models\GetRoleAndFeature_Result.cs">
       <DependentUpon>MemberModel.tt</DependentUpon>
     </Compile>
@@ -223,7 +231,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>MemberModel.edmx</DependentUpon>
     </Compile>
-    <Compile Include="Models\MemberPartial.cs" />
+    <Compile Include="Models\Partial\ForensicPartial.cs" />
+    <Compile Include="Models\Partial\MemberPartial.cs" />
     <Compile Include="Models\People.cs">
       <DependentUpon>MemberModel.tt</DependentUpon>
     </Compile>
@@ -234,9 +243,11 @@
     <Compile Include="Models\RoleFeature.cs">
       <DependentUpon>MemberModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\RolePartial.cs" />
+    <Compile Include="Models\Partial\RolePartial.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\CommunRecordService.cs" />
+    <Compile Include="Services\ExcelGenericService.cs" />
+    <Compile Include="Services\ForensicService.cs" />
     <Compile Include="Services\MenberService.cs" />
     <Compile Include="Services\CrudGenericService.cs" />
     <Compile Include="Services\AttachmentService.cs" />
@@ -321,6 +332,8 @@
     <Content Include="Views\Roles\EditFeature.cshtml" />
     <Content Include="Views\CommunRecords\Index.cshtml" />
     <Content Include="Views\CommunRecords\Edit.cshtml" />
+    <Content Include="Views\Forensics\IndexContact.cshtml" />
+    <Content Include="Views\Forensics\IndexSms.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

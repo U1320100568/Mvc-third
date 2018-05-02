@@ -8,10 +8,16 @@
 }
 
 <h2>CommunRecord</h2>
-<div class="pull-right">
-    @Html.PagedListPager((IPagedList)Model, x => Url.Action("Index", new { page = x }))
-
-    @Html.ActionLink("下載資料庫的檔案", "Download", "CommunRecords", new { id = Model.FirstOrDefault().AttachmentId }, new { @class = "btn btn-default pull-right" })
+<div class="row">
+    <div class="col-md-4">
+        @Html.ActionLink("返回檔案詳細", "Details", "Attachments", new { id = Model.FirstOrDefault().AttachmentId }, "")
+    </div>
+    <div class="col-md-6">
+        @Html.PagedListPager((IPagedList)Model, x => Url.Action("Index", new { page = x }))
+    </div>
+    <div class="col-md-2">
+        @Html.ActionLink("下載資料庫的檔案", "Download", "CommunRecords", new { id = Model.FirstOrDefault().AttachmentId }, new { @class = "btn btn-default pull-right" })
+    </div>
 </div>
 
 <table class="table">

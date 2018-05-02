@@ -1,0 +1,64 @@
+﻿@model IEnumerable<IntelligenceCloud.Models.ForensicSMS>
+
+@{
+    ViewBag.Title = "IndexSms";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>IndexSms</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.AttachmentId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FSheetNum)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FSheetName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FNum)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FCorrespond)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FDatetime)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.AttachmentId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FSheetNum)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FSheetName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FNum)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FCorrespond)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FDatetime)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.ForensicSMSID }) |
+            @Html.ActionLink("Details", "Details", new { id=item.ForensicSMSID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.ForensicSMSID })
+        </td>
+    </tr>
+}
+
+</table>

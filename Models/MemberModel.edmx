@@ -47,6 +47,35 @@
           <Property Name="CStationAddress" Type="nvarchar" MaxLength="100" />
           <Property Name="isDeleted" Type="bit" />
         </EntityType>
+        <EntityType Name="ForensicContact">
+          <Key>
+            <PropertyRef Name="ForensicContactID" />
+          </Key>
+          <Property Name="ForensicContactID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AttachmentId" Type="int" />
+          <Property Name="FSheetNum" Type="int" />
+          <Property Name="FSheetName" Type="nvarchar" MaxLength="20" />
+          <Property Name="FNum" Type="int" />
+          <Property Name="FName" Type="nvarchar" MaxLength="40" />
+          <Property Name="FGroup" Type="nvarchar" MaxLength="40" />
+          <Property Name="FModifiedTime" Type="datetime" />
+          <Property Name="FClause" Type="nvarchar" MaxLength="400" />
+          <Property Name="FNote" Type="nvarchar" MaxLength="1000" />
+          <Property Name="FSource" Type="nvarchar" MaxLength="30" />
+          <Property Name="isDeleted" Type="bit" />
+        </EntityType>
+        <EntityType Name="ForensicSMS">
+          <Key>
+            <PropertyRef Name="ForensicSMSID" />
+          </Key>
+          <Property Name="ForensicSMSID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AttachmentId" Type="int" />
+          <Property Name="FSheetNum" Type="int" />
+          <Property Name="FSheetName" Type="nvarchar" MaxLength="20" />
+          <Property Name="FNum" Type="int" />
+          <Property Name="FCorrespond" Type="nvarchar" MaxLength="70" />
+          <Property Name="FDatetime" Type="datetime" />
+        </EntityType>
         <EntityType Name="Member">
           <Key>
             <PropertyRef Name="MemberId" />
@@ -121,6 +150,8 @@
           <EntitySet Name="Attachment" EntityType="Self.Attachment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AttachmentRecord" EntityType="Self.AttachmentRecord" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CommunRecord" EntityType="Self.CommunRecord" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ForensicContact" EntityType="Self.ForensicContact" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ForensicSMS" EntityType="Self.ForensicSMS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Member" EntityType="Self.Member" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="People" EntityType="Self.People" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
@@ -160,6 +191,8 @@
           </AssociationSet>
           <EntitySet Name="People" EntityType="IntelligenceCloudModel.People" />
           <EntitySet Name="CommunRecord" EntityType="IntelligenceCloudModel.CommunRecord" />
+          <EntitySet Name="ForensicSMS" EntityType="IntelligenceCloudModel.ForensicSMS" />
+          <EntitySet Name="ForensicContact" EntityType="IntelligenceCloudModel.ForensicContact" />
           </EntityContainer>
         <EntityType Name="Member">
           <Key>
@@ -289,6 +322,35 @@
           <Property Name="CStationAddress" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="isDeleted" Type="Boolean" />
         </EntityType>
+        <EntityType Name="ForensicSMS">
+          <Key>
+            <PropertyRef Name="ForensicSMSID" />
+          </Key>
+          <Property Name="ForensicSMSID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AttachmentId" Type="Int32" />
+          <Property Name="FSheetNum" Type="Int32" />
+          <Property Name="FSheetName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="FNum" Type="Int32" />
+          <Property Name="FCorrespond" Type="String" MaxLength="70" FixedLength="false" Unicode="true" />
+          <Property Name="FDatetime" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="ForensicContact">
+          <Key>
+            <PropertyRef Name="ForensicContactID" />
+          </Key>
+          <Property Name="ForensicContactID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AttachmentId" Type="Int32" />
+          <Property Name="FSheetNum" Type="Int32" />
+          <Property Name="FSheetName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="FNum" Type="Int32" />
+          <Property Name="FName" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
+          <Property Name="FGroup" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
+          <Property Name="FModifiedTime" Type="DateTime" Precision="3" />
+          <Property Name="FClause" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
+          <Property Name="FNote" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="FSource" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="isDeleted" Type="Boolean" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -407,6 +469,37 @@
                 <ScalarProperty Name="IdCardNum" ColumnName="IdCardNum" />
                 <ScalarProperty Name="AttachmentId" ColumnName="AttachmentId" />
                 <ScalarProperty Name="CPhoneRecordId" ColumnName="CPhoneRecordId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ForensicSMS">
+            <EntityTypeMapping TypeName="IntelligenceCloudModel.ForensicSMS">
+              <MappingFragment StoreEntitySet="ForensicSMS">
+                <ScalarProperty Name="FDatetime" ColumnName="FDatetime" />
+                <ScalarProperty Name="FCorrespond" ColumnName="FCorrespond" />
+                <ScalarProperty Name="FNum" ColumnName="FNum" />
+                <ScalarProperty Name="FSheetName" ColumnName="FSheetName" />
+                <ScalarProperty Name="FSheetNum" ColumnName="FSheetNum" />
+                <ScalarProperty Name="AttachmentId" ColumnName="AttachmentId" />
+                <ScalarProperty Name="ForensicSMSID" ColumnName="ForensicSMSID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ForensicContact">
+            <EntityTypeMapping TypeName="IntelligenceCloudModel.ForensicContact">
+              <MappingFragment StoreEntitySet="ForensicContact">
+                <ScalarProperty Name="isDeleted" ColumnName="isDeleted" />
+                <ScalarProperty Name="FSource" ColumnName="FSource" />
+                <ScalarProperty Name="FNote" ColumnName="FNote" />
+                <ScalarProperty Name="FClause" ColumnName="FClause" />
+                <ScalarProperty Name="FModifiedTime" ColumnName="FModifiedTime" />
+                <ScalarProperty Name="FGroup" ColumnName="FGroup" />
+                <ScalarProperty Name="FName" ColumnName="FName" />
+                <ScalarProperty Name="FNum" ColumnName="FNum" />
+                <ScalarProperty Name="FSheetName" ColumnName="FSheetName" />
+                <ScalarProperty Name="FSheetNum" ColumnName="FSheetNum" />
+                <ScalarProperty Name="AttachmentId" ColumnName="AttachmentId" />
+                <ScalarProperty Name="ForensicContactID" ColumnName="ForensicContactID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
