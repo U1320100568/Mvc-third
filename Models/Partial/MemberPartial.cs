@@ -21,7 +21,6 @@ namespace IntelligenceCloud.Models
             [Required]
             [Display(Name = "密碼")]
             public string MemberPwd { get; set; }
-            public Nullable<int> RoleId { get; set; }
             
             public Nullable<bool> isDeleted { get; set; }
             

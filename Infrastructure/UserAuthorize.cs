@@ -46,7 +46,7 @@ namespace IntelligenceCloud.Infrastructure
 
         protected override void HandleUnauthorizedRequest(AuthorizationContext filterContext)
         {
-
+            /*
             RoleFeature feature = featureService.GetFirstOrDefault(IdentityHelper.UserId);
             if (feature != null)
             {
@@ -58,7 +58,7 @@ namespace IntelligenceCloud.Infrastructure
                 //用URL
                 filterContext.HttpContext.Response.Redirect("~/Home/Logout");
             }
-
+            */
 
             //filterContext.Result = new ViewResult { ViewName = AuthorizationFailView };
         }

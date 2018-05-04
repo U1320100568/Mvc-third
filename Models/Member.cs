@@ -14,20 +14,10 @@ namespace IntelligenceCloud.Models
     
     public partial class Member
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Member()
-        {
-            this.Role = new HashSet<Role>();
-        }
-    
         public int MemberId { get; set; }
         public string MemberAccount { get; set; }
         public string MemberName { get; set; }
         public string MemberPwd { get; set; }
-        public Nullable<int> RoleId { get; set; }
         public Nullable<bool> isDeleted { get; set; }
-    
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Role> Role { get; set; }
     }
 }

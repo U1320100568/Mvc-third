@@ -10,6 +10,14 @@ namespace IntelligenceCloud.Services
     {
         public RoleService()
         {
+
+        }
+
+        public void LockRole(int id)
+        {
+            Role role = Get(r => r.RoleId == id);
+            role.RLock = role.RLock == true ? false : true;
+            Update(role);
         }
     }
 }

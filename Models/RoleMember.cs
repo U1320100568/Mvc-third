@@ -12,11 +12,11 @@ namespace IntelligenceCloud.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class RoleFeature
+    public partial class RoleMember
     {
-        public int RFNum { get; set; }
+        public int RMNum { get; set; }
         public int RoleId { get; set; }
-        public int FeatureId { get; set; }
+        public int MemberId { get; set; }
         public Nullable<int> UpdaterId { get; set; }
         public Nullable<System.DateTime> UpdateDate { get; set; }
     }

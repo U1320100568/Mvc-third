@@ -1,5 +1,6 @@
 ﻿using IntelligenceCloud.Models;
 using IntelligenceCloud.Services;
+using IntelligenceCloud.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,55 +11,118 @@ namespace IntelligenceCloud.Controllers
 {
     public class RolesController : Controller
     {
-        private RoleFeatureService roleFeatureService;
-        private RoleService roleService;
+
+        private RoleService roleSrv;
+        private FeatureService featSrv;
 
         public RolesController() {
-            roleFeatureService = new RoleFeatureService();
-            roleService = new RoleService();
+
+            roleSrv = new RoleService();
+            featSrv = new FeatureService();
         }
 
         // GET: Roles
         public ActionResult Index()
         {
-            int? input = null;
-            var roles = roleFeatureService.GetFeature(input).GroupBy(r => r.RoleNum);
-            return View(roles);
+
+            return View(roleSrv.GetAll().ToList());
         }
 
-        // GET: Roles/Details/5
-        public ActionResult Details(int id)
-        {
-            //id = RoleNum
-            var roles = roleFeatureService.GetRoleAndMember(id).GroupBy(r => r.MemberId); 
-            return View(roles);
-        }
 
         // GET: Roles/Create
-        public ActionResult Create()
+        public ActionResult CreateEdit(int? id)
         {
-           
-            return View();
+            Role role = roleSrv.Get(r => r.RoleId == id);
+            if (role != null)
+            {
+                return PartialView("_PartialCreateEdit", role);
+            }
+            else
+            {
+                return PartialView("_PartialCreateEdit", new Role());
+            }
+
         }
 
         // POST: Roles/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(CreateRoleViewModel roleAndFeature)
+        public ActionResult CreateEdit(Role role)
         {
+            if (role.RoleId == 0)
+            {
+                roleSrv.Create(role);
 
-            roleFeatureService.CreateRole(roleAndFeature);
+            }
+            else
+            {
+                roleSrv.Update(role);
+            }
             return RedirectToAction("Index");
-            
+
         }
+
+        public ActionResult EditRoleFeature()
+        {
+            RoleFeatureViewModel viewModel = new RoleFeatureViewModel() {
+                Roles = roleSrv.GetAll().ToList(),
+                Features = featSrv.GetAll().ToList()
+
+            };
+            return View(viewModel);
+        }
+
+        public ActionResult FeatureList(int id)
+        {
+            RoleFeatureViewModel viewModel = new RoleFeatureViewModel()
+            {
+                Roles = roleSrv.GetAll().ToList(),
+                RoleFeatures = featSrv.GetRoleFeat(id).ToList(),
+                Features = featSrv.GetRestFeat(id).ToList(),
+                CurrentRoleId = id
+               
+            };
+
+            return View("EditRoleFeature", viewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult RoleModifiedFeature( int roleId,int? roleFeatureId, int? featureId)
+        {
+            if(featureId != null)
+            {
+                //新增
+                featSrv.RoleAddFeature(roleId, (int)featureId);
+            }
+            if(roleFeatureId != null)
+            {
+                //刪除
+                featSrv.RoleRemoveFeature((int)roleFeatureId);
+            }
+
+            return RedirectToAction("FeatureList", new { id = roleId });
+        }
+
+        
 
         public ActionResult GetPartialView()
         {
             return View("_PartialCreate");
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Delete(int id)
+        {
+            Role role = roleSrv.Get(r => r.RoleId == id);
+            roleSrv.Delete(role);
+            return RedirectToAction("Index");
+        }
         
 
+
+        /*
        
         public ActionResult EditMember(int id)
         {
@@ -83,9 +147,7 @@ namespace IntelligenceCloud.Controllers
         }
         public ActionResult LockMember(int id)
         {
-            Role role = roleService.Get(r => r.RoleId == id);
-            role.RoleLock = (bool)role.RoleLock ? false : true;
-            roleService.Update(role);
+            roleService.LockRole(id);
             return RedirectToAction("EditMember", new { id = role.RoleNum });
         }
         [HttpPost]
@@ -134,5 +196,7 @@ namespace IntelligenceCloud.Controllers
             }
             base.Dispose(disposing);
         }
+
+        */
     }
 }

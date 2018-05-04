@@ -12,8 +12,6 @@ namespace IntelligenceCloud.Models
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
-    using System.Data.Entity.Core.Objects;
-    using System.Linq;
     
     public partial class IntelligenceCloudEntities : DbContext
     {
@@ -27,32 +25,16 @@ namespace IntelligenceCloud.Models
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<Member> Member { get; set; }
         public virtual DbSet<AttachmentRecord> AttachmentRecord { get; set; }
-        public virtual DbSet<Role> Role { get; set; }
-        public virtual DbSet<RoleFeature> RoleFeature { get; set; }
         public virtual DbSet<Attachment> Attachment { get; set; }
         public virtual DbSet<People> People { get; set; }
         public virtual DbSet<CommunRecord> CommunRecord { get; set; }
         public virtual DbSet<ForensicSMS> ForensicSMS { get; set; }
         public virtual DbSet<ForensicContact> ForensicContact { get; set; }
-    
-        public virtual ObjectResult<GetRoleAndFeature_Result> GetRoleAndFeature(Nullable<int> memberId)
-        {
-            var memberIdParameter = memberId.HasValue ?
-                new ObjectParameter("MemberId", memberId) :
-                new ObjectParameter("MemberId", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetRoleAndFeature_Result>("GetRoleAndFeature", memberIdParameter);
-        }
-    
-        public virtual ObjectResult<GetRoleAndMember_Result> GetRoleAndMember(Nullable<int> roleNum)
-        {
-            var roleNumParameter = roleNum.HasValue ?
-                new ObjectParameter("RoleNum", roleNum) :
-                new ObjectParameter("RoleNum", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetRoleAndMember_Result>("GetRoleAndMember", roleNumParameter);
-        }
+        public virtual DbSet<Feature> Feature { get; set; }
+        public virtual DbSet<Member> Member { get; set; }
+        public virtual DbSet<Role> Role { get; set; }
+        public virtual DbSet<RoleFeature> RoleFeature { get; set; }
+        public virtual DbSet<RoleMember> RoleMember { get; set; }
     }
 }

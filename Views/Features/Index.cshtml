@@ -1,0 +1,91 @@
+﻿@model IEnumerable<IntelligenceCloud.Models.Feature>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+<button type="button" class="btn btn-default edit" data-button="@null">新增</button>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.FName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ControllerName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ActionName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.UpdaterId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.UpdateDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.isDeleted)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ControllerName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ActionName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UpdaterId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UpdateDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.isDeleted)
+            </td>
+            <td>
+
+                
+                @using (Html.BeginForm("Delete", "Features", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.Hidden("id",item.FeatureId)
+                <button type="button" class="btn btn-default edit" data-button="@item.FeatureId">編輯</button>
+                    <input type="submit" class="btn btn-danger" value="刪除" />
+                }
+            </td>
+        </tr>
+    }
+
+</table>
+<div id="partialarea">
+    <div class="modal fade" tabindex="-1" role="dialog" id="edit">
+        <div id="editcontainer"></div>
+    </div>
+</div>
+
+@section scripts{
+<script type="text/javascript">
+        $(document).ready(function () {
+            
+            $("button.edit").click(function () {
+                var id = $(this).data('button');
+                $.get("/Features/CreateEdit"+'/'+id, function (temp) {
+                    $("#editcontainer").html(temp);
+                })
+                $("#edit").modal("show");
+            })
+
+
+        });
+</script>
+}

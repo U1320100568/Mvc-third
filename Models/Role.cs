@@ -15,12 +15,10 @@ namespace IntelligenceCloud.Models
     public partial class Role
     {
         public int RoleId { get; set; }
-        public Nullable<int> RoleNum { get; set; }
-        public int MemberId { get; set; }
-        public string Description { get; set; }
-        public Nullable<bool> RoleLock { get; set; }
+        public string RName { get; set; }
+        public Nullable<System.DateTime> UpdateDate { get; set; }
+        public Nullable<int> UpdaterId { get; set; }
+        public Nullable<bool> RLock { get; set; }
         public Nullable<bool> isDeleted { get; set; }
-    
-        public virtual Member Member { get; set; }
     }
 }

@@ -20,14 +20,15 @@ namespace IntelligenceCloud.Services
         public bool ControllerAccessible(int memberId,string name)
         {
             return GetFeature(memberId).Any(f => f.ControllerName == name);
-
+            
         }
 
         public bool ActionAccessible(int memberId, string name)
         {
             return GetFeature(memberId).Any(f => f.ActionName == name);
+            
         }
-
+        /*
         public RoleFeature GetFirstOrDefault(int? memberId)
         {
             if(memberId != null)
@@ -45,9 +46,11 @@ namespace IntelligenceCloud.Services
                 return null;
             }
         }
-
+        */
+        /**/
         public IQueryable<RoleAndFeatureViewModel> GetFeature(int? memberId)
         {
+            /*
             List<GetRoleAndFeature_Result> rolesFromSp;
 
             using (IntelligenceCloudEntities ctx = new IntelligenceCloudEntities())
@@ -69,9 +72,11 @@ namespace IntelligenceCloud.Services
             }).Where(r => r.RoleLock == false).AsQueryable();
 
             return role;
-
+            */
+            IQueryable<RoleAndFeatureViewModel> a = null;
+            return a;
         }
-
+        
         public void CreateRole (CreateRoleViewModel viewModel)
         {
             int RoleNum;
@@ -83,18 +88,19 @@ namespace IntelligenceCloud.Services
                 //int? RoleNum = roleService.GetAll().Max(r => r.RoleNum) + 1;
             Role role = new Role()
             {
+                /*
                 MemberId = viewModel.RoleAndFeatureViewModel.FirstOrDefault().MemberId,
                 RoleLock = false,
                 Description = viewModel.RoleAndFeatureViewModel.FirstOrDefault().Description,
                 RoleNum = RoleNum,
                 isDeleted = false,
-                
+                */
             };
             roleService.Create(role);
 
             foreach( var roleAndFeature in viewModel.RoleAndFeatureViewModel)
             {
-                
+                /*
                 RoleFeature feature = new RoleFeature() {
                     isDeleted=false,
                     RoleNum = RoleNum,
@@ -102,7 +108,8 @@ namespace IntelligenceCloud.Services
                     ControllerName = roleAndFeature.ControllerName
                 
                 };
-                Create(feature);
+                
+                Create(feature);*/
             }
             
             
@@ -110,9 +117,10 @@ namespace IntelligenceCloud.Services
 
             
         }
-
+        /*
         public IQueryable<RoleAndFeatureViewModel> GetRoleAndMember(int? roleNum)
         {
+            
             List<GetRoleAndMember_Result> rolesFromSp;
 
             using (IntelligenceCloudEntities ctx = new IntelligenceCloudEntities())
@@ -135,7 +143,7 @@ namespace IntelligenceCloud.Services
             return role;
         }
         
-        
+        */
 
 
 

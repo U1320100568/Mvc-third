@@ -1,0 +1,80 @@
+﻿@model IntelligenceCloud.ViewModel.RoleFeatureViewModel
+
+@{
+    ViewBag.Title = "EditRoleFeature";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>EditRoleFeature</h2>
+
+<div class="well">
+    <h4>RoleFeatureViewModel</h4>
+    <hr />
+    <ul class="nav nav-pills nav-stacked">
+
+        @Html.Hidden("roleid", Model.CurrentRoleId)
+        @foreach (var role in Model.Roles)
+    {
+        <li role="presentation">
+            @Html.ActionLink(role.RName, "FeatureList", new { id = role.RoleId }, new { id = "feat" + role.RoleId })
+        </li>
+}
+    </ul>
+</div>
+@if (Model.RoleFeatures != null && Model.RoleFeatures.FirstOrDefault() != null)
+{
+    
+    <div class="well col-md-4">
+        <ul class="nav nav-pills nav-stacked">
+            @foreach (var feat in Model.RoleFeatures)
+            {
+            <li role="presentation">
+                @Html.ActionLink(feat.FeatName, "FeatureList", new { id = feat.RoleFeat.RFNum })
+
+                @using (Html.BeginForm("RoleModifiedFeature", "Roles", FormMethod.Post))
+    {
+                    @Html.AntiForgeryToken()
+                    @Html.Hidden("roleFeatureId", feat.RoleFeat.RFNum)
+                    @Html.Hidden("roleId", Model.CurrentRoleId)
+                    <input type="submit" value="@feat.FeatName" class="btn btn-link" />
+}
+            </li>
+            }
+        </ul>
+
+    </div>
+}
+
+    <div class="well col-md-4">
+        <ul class="nav nav-pills nav-stacked">
+            @foreach (var feat in Model.Features)
+            {
+            <li role="presentation">
+                @Html.ActionLink(feat.FName, "FeatureList")
+
+                @using (Html.BeginForm("RoleModifiedFeature", "Roles", FormMethod.Post))
+                 {
+                    @Html.AntiForgeryToken()
+                    @Html.Hidden("featureId", feat.FeatureId)
+                    @Html.Hidden("roleId", Model.CurrentRoleId)
+                
+                    <input type="submit" value="@feat.FName" class="btn btn-link" />
+                }
+            </li>
+            }
+        </ul>
+    </div>
+
+<p>
+    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
+@section scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var roleid = $("#roleid").val()
+            $("#feat" + roleid).parent("li").addClass("active");
+
+        })
+    </script>
+}

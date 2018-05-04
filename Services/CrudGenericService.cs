@@ -48,6 +48,7 @@ namespace IntelligenceCloud.Services
             }
             else
             {
+                ValueSettingHelper.SetCreateValue<TEntity>(entity);
                 Db.Set<TEntity>().Add(entity);
                 SaveChanges();
             }
@@ -61,6 +62,7 @@ namespace IntelligenceCloud.Services
             }
             else
             {
+                ValueSettingHelper.SetUpdateValue<TEntity>(entity);
                 Db.Entry(entity).State = EntityState.Modified;
                 SaveChanges();
             }

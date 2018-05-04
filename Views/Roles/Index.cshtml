@@ -1,4 +1,4 @@
-﻿@model IQueryable<IGrouping<int?, IntelligenceCloud.Models.RoleAndFeatureViewModel>>
+﻿@model IEnumerable<IntelligenceCloud.Models.Role>
 
 @{
     ViewBag.Title = "權限列表";
@@ -7,44 +7,80 @@
 
 <h2>權限列表</h2>
 
-<p>
-    @Html.ActionLink("新增權限", "Create")
-</p>
+
+<button type="button" class="btn btn-default edit" data-button="@null">新增</button>
+<table class="table">
 
 
-@foreach (var role in Model)
-{
-<div class="panel panel-default">
-    <div class="panel-heading"><b>權限： @Html.DisplayFor(title => role.FirstOrDefault().Description)</b></div>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.RName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RLock)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.UpdaterId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.UpdateDate)
+        </th>
+        <th></th>
+    </tr>
+    @foreach (var item in Model)
+    {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.RName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem =>item.RLock)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.UpdaterId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.UpdateDate)
+        </td>
+        <td>
 
-    <table class="table">
 
-      
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => role.FirstOrDefault().ControllerName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => role.FirstOrDefault().ActionName)
-            </th>
-            <th></th>
-        </tr>
-        @foreach (var feature in role)
+            @using (Html.BeginForm("Delete", "Roles", FormMethod.Post))
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(Model => feature.ControllerName)
-                </td>
-                <td>
-                    @Html.DisplayFor(Model => feature.ActionName)
-                </td>
-                <td></td>
-            </tr>
-        }
+            @Html.AntiForgeryToken()
+            @Html.Hidden("id", item.RoleId)
+            <button type="button" class="btn btn-default edit" data-button="@item.RoleId">編輯</button>
+            <input type="submit" class="btn btn-danger" value="刪除" />
+    }
 
-    </table>
-    <div class="panel-footer text-right">@Html.ActionLink("詳細", "Details", new { id = role.FirstOrDefault().RoleNum }  )</div>
+        </td>
+    </tr>
+    }
+
+</table>
+
+<div id="partialarea">
+    <div class="modal fade" tabindex="-1" role="dialog" id="edit">
+        <div id="editcontainer"></div>
+    </div>
 </div>
+
+@section scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $("button.edit").click(function () {
+               
+                var id = $(this).data('button');
+                $.get("/Roles/CreateEdit"+'/'+id, function (temp) {
+                    $("#editcontainer").html(temp);
+                })
+                $("#edit").modal("show");
+            })
+
+
+        });
+    </script>
 }
 
 

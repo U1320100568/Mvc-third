@@ -69,6 +69,7 @@ namespace IntelligenceCloud.Services
             ///判斷權限被鎖住
             
             /////加入使用者擁有的權限
+            /*
             var roles = member.Role;
             foreach(var role in roles)
             {
@@ -78,7 +79,7 @@ namespace IntelligenceCloud.Services
                 }
                 
             }
-                
+                */
                
             
             
@@ -101,18 +102,22 @@ namespace IntelligenceCloud.Services
         ////建立帳號的初始設定
         public Member CreateAccountSetting(Member member)
         {
+            /*
             ////權限設定初始化
             Role role= new Role {
                 RoleLock = false,
                 isDeleted = false
             };
             member.Role.Add(role);
+            */
             return member;
+            
         }
         ////解除帳號的設定
         public Member DeleteAccountSetting(Member member)
         {
-            member.Role.Select(r => r.isDeleted = true) ;
+
+            //member.Role.Select(r => r.isDeleted = true) ;
             return member;
         }
     }
