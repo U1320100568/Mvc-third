@@ -1,0 +1,38 @@
+﻿
+<div class="row">
+    <div class="col-md-2">
+        @Html.ActionLink("返回上一層", "Details", "Attachments", new { id = Model }, "")
+    </div>
+    <div class="col-md-2 pull-right">
+        @Html.ActionLink("下載資料庫的檔案", "Export", "Forensics", new { id = Model }, new { @class = "btn btn-default pull-right" })
+    </div>
+
+</div>
+
+
+<ul class="nav nav-tabs nav-justified">
+    <li role="presentation">
+        @Html.ActionLink("SMS簡訊", "IndexSms", "Forensics", new { id = Model }, new { @class = "" ,id = "IndexSms" })
+
+    </li>
+    <li role="presentation">
+        @Html.ActionLink("聯絡人", "IndexContact", "Forensics", new { id = Model }, new { @class = "", id = "IndexContact" })
+
+    </li>
+</ul>
+
+
+@Scripts.Render("~/bundles/jquery")
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        var loc = location.href
+        var reg = /Forensics\/(.+)\//g
+        var match = reg.exec(loc);
+        $("#" + match[1]).parents("li").addClass("active")
+    });
+</script>
+
+
+

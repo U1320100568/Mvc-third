@@ -1,0 +1,190 @@
+﻿@model IntelligenceCloud.ViewModel.RoleMemberViewModel
+
+@{
+    ViewBag.Title = "EditRoleMember";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>角色與會員的配置</h2>
+
+<div class="alert alert-danger alert-dismissable collapse" role="alert" >
+<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+</button>
+        請選擇會員
+</div>
+
+<div class="row">
+    <div class=" col-md-4">
+        <div class="panel panel-default radius-panel">
+            <div class="panel-heading radius-panel">
+                <h4>會員列表</h4>
+                <hr />
+            </div>
+            <div class="panel-body">
+                <ul class="nav nav-pills nav-stacked">
+
+                    @Html.Hidden("memberid", Model.CurrentMemberId)
+                    @foreach (var role in Model.Members)
+                    {
+                        <li role="presentation">
+                            @Html.ActionLink(role.MemberName, "RoleList", new { id = role.MemberId }, new { id = "member" + role.MemberId })
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class=" col-md-4" style="display:none">
+        <div class="panel panel-info radius-panel">
+            <div class="panel-heading radius-panel">
+                <h4>會員擁有的角色</h4>
+                <hr />
+            </div>
+            <div class="panel-body">
+                <ul class="nav nav-pills nav-stacked" id="ownRole">
+                    @if (Model.RoleMembers != null && Model.RoleMembers.FirstOrDefault() != null)
+                    {
+                        foreach (var role in Model.RoleMembers)
+                        {
+                            <li role="presentation">
+                                <a href="#" class="ownRoleItem" data-rolemembernum="@role.RoleMem.RMNum">
+                                    <i class="glyphicon glyphicon-minus"></i> @role.RoleName
+                                </a>
+                            </li>
+                        }
+
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class=" col-md-4" style="display:none">
+        <div class="panel panel-info radius-panel">
+            <div class="panel-heading radius-panel">
+                <h4>未加入的角色</h4>
+                <hr />
+            </div>
+            <div class="panel-body">
+                <ul class="nav nav-pills nav-stacked" id="restRole">
+                    @foreach (var role in Model.Roles)
+                    {
+                        <li role="presentation">
+                            <a href="#" class="restRoleItem" data-roleid="@role.RoleId">
+                                <i class="glyphicon glyphicon-plus"></i> @role.RName
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+
+
+    $(document).ready(function () {
+        var memberid = $("#memberid").val()
+        $("#member" + memberid).parent("li").addClass("active");
+
+
+        //調整三個列表的column寬度4,4,4  6,6
+        $(".panel-info").each(function () {
+
+            if ($(this).find("ul").find("li").length != 0) {
+
+                $(this).parent("div").show("slow");
+            } else {
+                $(this).parent("div").siblings().removeClass("col-md-4").addClass("col-md-6")
+            }
+
+        })
+
+
+        /////沒擁有的角色click event
+        $("#restRole").on('click', '.restRoleItem', function (e) {
+            var element = $(this);
+            e.preventDefault();
+            if (memberid == "") {
+                $(".alert").slideDown("slow");
+                return false;
+            }
+
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("MemberModifiedRoles")",
+                data: {
+                    memberId: memberid,
+                    roleId: $(this).data("roleid")
+                },
+                success: function (response) {
+                    //////加入element 移除element
+                    var item = $('<li role="presentation"><a href="#" class="ownRoleItem" data-rolemembernum="' + response.roleMemberNum +
+                        '"><i class="glyphicon glyphicon-minus"></i>    '
+                        + response.roleName + '  </a> </li>');///
+                    $("#ownRole").append(item);
+                    element.parent("li").remove();
+                    ////加到空白陣列要show出來 💋
+                    var panelDiv = $("#ownRole").closest(".panel-info").parent("div");
+                    if (!panelDiv.is(':visible')) {
+                        panelDiv.show("slow");
+                        panelDiv.siblings().toggleClass("col-md-6 col-md-4")
+                    }
+                    ////移除到空陣列要hide
+                    if ($("#restRole").find("li").length == 0) {
+                        $("#restRole").closest(".panel-info").parent("div").hide("slow");
+                        $("#restRole").closest(".panel-info").parent("div").siblings().toggleClass("col-md-6 col-md-4")
+                    }
+
+
+                }
+            });
+
+        })
+
+        //擁有的角色 click event
+        $("#ownRole").on('click', '.ownRoleItem', function (e) {
+            var element = $(this);
+            e.preventDefault();
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("MemberModifiedRoles")",
+                data: {
+                    memberId: memberid,
+                    roleMemberNum: $(this).data("rolemembernum")
+                },
+                success: function (response) {
+                    //////加入element 移除element
+                    var item = $('<li role="presentation"><a href="#" class="restRoleItem" data-roleid="' + response.roleId +
+                        '"><i class="glyphicon glyphicon-plus"></i>    '
+                        + response.roleName + '  </a> </li>');///
+                    $("#restRole").append(item);
+                    element.parent("li").remove();
+
+                    ////加到空白陣列要show出來 💋
+                    var panelDiv = $("#restRole").closest(".panel-info").parent("div");
+                    if (!panelDiv.is(':visible')) {
+                        panelDiv.show("slow");
+                        panelDiv.siblings().toggleClass("col-md-6 col-md-4")
+                    }
+                     ////移除到空陣列要hide
+                    if ($("#ownRole").find("li").length == 0) {
+                        $("#ownRole").closest(".panel-info").parent("div").hide("slow");
+                        $("#ownRole").closest(".panel-info").parent("div").siblings().toggleClass("col-md-6 col-md-4")
+                    }
+                }
+            });
+        })
+
+
+
+    })
+
+
+
+    </script>
+}
+

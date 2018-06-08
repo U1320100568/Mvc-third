@@ -1,0 +1,76 @@
+﻿@model IEnumerable<IntelligenceCloud.Models.Attachment>
+@using IntelligenceCloud.Helpers
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create", "", new { @class = "btn btn-default radius-btn createEdit " })
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.AttachmentPath)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AttachmentName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AttachmentType)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AttachmentUse)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MemberId)
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(model => model.UploadTime)
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(model => model.DownloadTime)
+        </th>
+        <th></th>
+    </tr>
+@if(Model != null) { 
+foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.AttachmentPath)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AttachmentName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AttachmentType)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AttachmentUse)
+        </td>
+        <td>
+            @Html.DisplayName(IdentityHelper.GetMemberName(item.MemberId))
+        </td>
+
+        <td>
+            @Html.DisplayFor(modelItem => item.UploadTime)
+        </td>
+
+        <td>
+            @Html.DisplayFor(modelItem => item.DownloadTime)
+        </td>
+        <td>
+            
+                @Html.ActionLink("內容", "Details", new { id = item.AttachmentId }, new { @class = "btn btn-sm btn-default" })
+                @Html.ActionLink("刪除", "Delete", new { id = item.AttachmentId }, new { @class = "btn btn-sm btn-danger" })
+            
+
+        </td>
+    </tr>
+}
+}
+</table>

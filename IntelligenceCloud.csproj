@@ -58,10 +58,25 @@
     <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
       <HintPath>..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.AspNet.SignalR.Core, Version=2.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.SignalR.Core.2.2.3\lib\net45\Microsoft.AspNet.SignalR.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.SignalR.SystemWeb, Version=2.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.SignalR.SystemWeb.2.2.3\lib\net45\Microsoft.AspNet.SignalR.SystemWeb.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.7\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Owin, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.2.1.0\lib\net45\Microsoft.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Host.SystemWeb, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Host.SystemWeb.2.1.0\lib\net45\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.2.1.0\lib\net45\Microsoft.Owin.Security.dll</HintPath>
+    </Reference>
     <Reference Include="NPOI, Version=2.3.0.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
       <HintPath>..\packages\NPOI.2.3.0\lib\net40\NPOI.dll</HintPath>
     </Reference>
@@ -73,6 +88,9 @@
     </Reference>
     <Reference Include="NPOI.OpenXmlFormats, Version=2.3.0.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
       <HintPath>..\packages\NPOI.2.3.0\lib\net40\NPOI.OpenXmlFormats.dll</HintPath>
+    </Reference>
+    <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
+      <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
     </Reference>
     <Reference Include="PagedList, Version=1.17.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
       <HintPath>..\packages\PagedList.1.17.0.0\lib\net40\PagedList.dll</HintPath>
@@ -176,6 +194,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AttachmentsController.cs" />
     <Compile Include="Controllers\CommunRecordsController.cs" />
+    <Compile Include="Controllers\FeaturesController.cs" />
     <Compile Include="Controllers\ForensicsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MembersController.cs" />
@@ -185,10 +204,15 @@
     </Compile>
     <Compile Include="Helpers\ExpressionHelper.cs" />
     <Compile Include="Helpers\FeatureHelper.cs" />
+    <Compile Include="Helpers\FileHelper.cs" />
     <Compile Include="Helpers\IdentityHelper.cs" />
     <Compile Include="Helpers\ParseHelper.cs" />
+    <Compile Include="Helpers\ValueSettingHelper.cs" />
     <Compile Include="Infrastructure\UserAuthorize.cs" />
     <Compile Include="Models\Attachment.cs">
+      <DependentUpon>MemberModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Feature.cs">
       <DependentUpon>MemberModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ForensicContact.cs">
@@ -201,18 +225,13 @@
     <Compile Include="Models\AttachmentRecord.cs">
       <DependentUpon>MemberModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\AttachViewModel.cs" />
+    <Compile Include="Services\SignalR.cs" />
+    <Compile Include="ViewModel\AttachViewModel.cs" />
     <Compile Include="Models\CommunRecord.cs">
       <DependentUpon>MemberModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Partial\CommunRecordPartial.cs" />
     <Compile Include="Models\Partial\EntitiesPartial.cs" />
-    <Compile Include="Models\GetRoleAndFeature_Result.cs">
-      <DependentUpon>MemberModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\GetRoleAndMember_Result.cs">
-      <DependentUpon>MemberModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\Member.cs">
       <DependentUpon>MemberModel.tt</DependentUpon>
     </Compile>
@@ -231,6 +250,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>MemberModel.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\Partial\FeaturePartial.cs" />
     <Compile Include="Models\Partial\ForensicPartial.cs" />
     <Compile Include="Models\Partial\MemberPartial.cs" />
     <Compile Include="Models\People.cs">
@@ -239,26 +259,30 @@
     <Compile Include="Models\Role.cs">
       <DependentUpon>MemberModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\RoleAndFeatureViewModel.cs" />
     <Compile Include="Models\RoleFeature.cs">
       <DependentUpon>MemberModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Partial\RolePartial.cs" />
+    <Compile Include="Models\RoleMember.cs">
+      <DependentUpon>MemberModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\CommunRecordService.cs" />
     <Compile Include="Services\ExcelGenericService.cs" />
+    <Compile Include="Services\FeatureService.cs" />
     <Compile Include="Services\ForensicService.cs" />
     <Compile Include="Services\MenberService.cs" />
     <Compile Include="Services\CrudGenericService.cs" />
     <Compile Include="Services\AttachmentService.cs" />
     <Compile Include="Services\Interface\ICrudService.cs" />
-    <Compile Include="Services\RoleFeatureService.cs" />
     <Compile Include="Services\RoleService.cs" />
+    <Compile Include="ViewModel\RoleFeatureViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\PagedList.css" />
+    <Content Include="Content\StyleSheet1.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -286,9 +310,12 @@
       <DependentUpon>MemberModel.edmx</DependentUpon>
     </Content>
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\createFile.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.signalR-2.2.3.js" />
+    <Content Include="Scripts\jquery.signalR-2.2.3.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
@@ -296,6 +323,7 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\tableSort.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -309,8 +337,6 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\Login.cshtml" />
     <Content Include="Views\Members\Create.cshtml" />
@@ -324,20 +350,24 @@
     <Content Include="Views\Attachments\Details.cshtml" />
     <Content Include="Views\Attachments\Index.cshtml" />
     <Content Include="Views\Roles\Index.cshtml" />
-    <Content Include="Views\Roles\Create.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\Collection.cshtml" />
-    <Content Include="Views\Roles\_PartialCreate.cshtml" />
-    <Content Include="Views\Roles\Details.cshtml" />
-    <Content Include="Views\Roles\EditMember.cshtml" />
-    <Content Include="Views\Roles\EditFeature.cshtml" />
     <Content Include="Views\CommunRecords\Index.cshtml" />
     <Content Include="Views\CommunRecords\Edit.cshtml" />
     <Content Include="Views\Forensics\IndexContact.cshtml" />
     <Content Include="Views\Forensics\IndexSms.cshtml" />
+    <Content Include="Views\Features\Index.cshtml" />
+    <Content Include="Views\Features\_PartialCreateEdit.cshtml" />
+    <Content Include="Views\Roles\_PartialCreateEdit.cshtml" />
+    <Content Include="Views\Roles\EditRoleFeature.cshtml" />
+    <Content Include="Views\Roles\EditRoleMember.cshtml" />
+    <Content Include="Views\Forensics\_PartialTab.cshtml" />
+    <Content Include="Views\Forensics\EditSms.cshtml" />
+    <Content Include="Views\Forensics\EditConta.cshtml" />
+    <Content Include="Views\Attachments\_MemberShared.cshtml" />
+    <Content Include="Views\Members\_PartialCreateEdit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="ViewModel\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

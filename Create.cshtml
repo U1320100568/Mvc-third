@@ -1,0 +1,63 @@
+﻿@*@model IntelligenceCloud.Models.Attachment
+*@
+@model IntelligenceCloud.Models.AttachViewModel
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2></h2>
+
+@*因為要上傳檔案encrtype*@
+@using (Html.BeginForm("Create", "Attachments", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    @*因為上傳多個檔案，使用html5 multiple屬性*@
+    <div class="jumbotron" >
+        <h1>上傳檔案</h1>
+
+
+
+        <div class="btn-group btn-container" role="group">
+
+            @*<input type="file" name="AttachFiles" multiple class="btn btn-default btn-item" id="AttachFiles" />*@
+            <label class="btn btn-default btn-item">
+                <input type="file" name="AttachFiles" multiple class="btn btn-default btn-item" id="AttachFiles" style="display:none"/>
+                <i class="glyphicon glyphicon-file"></i><span>檔案上傳</span></label>
+            @Html.DropDownListFor(u => Model.AttachmentUse, new SelectList(ViewBag.attachmentUse, "Value", "Text"),
+                          "選擇檔案類型", new { @class = "btn btn-default dropdown-toggle btn-item" })
+
+            <input type="submit" value="上傳" class="btn  btn-default btn-item" style="display:none" />
+
+            @*ajax上傳*@
+            <button type="button" id="btnSubmit" class="btn btn-default btn-item">Upload</button>
+            @Html.Hidden("url", Url.Action("CreateaAjax"))
+
+        </div>
+
+
+        <span id="statustxt"></span>
+        <span id="canvas-wrap" style="display:none ">
+            <canvas id="canvas" width="210" height="210" style="background:rgba(0,0,0,0.0);"></canvas>
+        </span>
+        <div id="complete" style="display:none">
+            <h3><i class="glyphicon glyphicon-ok"> </i>上傳完成</h3>
+        </div>
+    </div>
+}
+
+
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @*使用signalR必須要引用*@
+    <script src="~/Scripts/jquery.signalR-2.2.3.min.js"></script>
+    <script src="@Url.Content("~/signalr/hubs")"></script>
+    @*自定義javascript*@
+    @Scripts.Render("~/Scripts/createFile.js")
+   
+}

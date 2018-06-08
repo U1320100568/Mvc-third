@@ -1,0 +1,122 @@
+﻿@model IntelligenceCloud.Models.AttachMemberShared
+
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button typeof="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <div>
+                <h4>修改檔案共用人</h4>
+                <a href="" class="btn btn-default radius-btn" onclick="return false">
+                    <i class="glyphicon glyphicon-user"></i>
+                    @IdentityHelper.GetMemberName(Model.Attach.MemberId)
+                </a>
+
+
+            </div>
+            
+        </div>
+        <div class=" modal-body">
+            
+            <div id="sharedDiv" class="panel panel-primary radius-panel">
+                <div class="panel-heading radius-panel">
+                    已共享會員
+                </div>
+                <div class="panel-body">
+                    @foreach (var item in Model.MemberShared)
+                    {
+                        if (item != null){
+                            
+                                @Html.ActionLink( item.MemberName, "MemberSharedAddRemove","",new { @class = "btn btn-default radius-btn", data_memberid = item.MemberId }) 
+                            
+                        }
+                    }
+                </div>
+            </div>
+            <div id="unsharedDiv" class="panel panel-info radius-panel">
+                <div class="panel-heading radius-panel">
+                    未共享會員
+                </div>
+                <div class="panel-body">
+                    @foreach (var item in Model.MemberUnshared)
+                    {
+                        if(item != null)
+                        {
+                            
+                                @Html.ActionLink(  item.MemberName, "MemberSharedAddRemove" ,"", new { @class = "btn btn-default radius-btn", data_memberid = item.MemberId }) 
+                                
+                           
+                        }
+                    }
+                </div>
+            </div>
+
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+        </div>
+    </div>
+</div>
+
+    
+<script type="text/javascript">
+    $(document).ready(function () {
+        //加入icon
+        $("#unsharedDiv").find("a").each(function () {
+            $(this).prepend("<i class='glyphicon glyphicon-upload'></i>&nbsp;&nbsp;")
+        })
+        //加入icon
+        $("#sharedDiv").find("a").each(function () {
+            $(this).prepend("<i class='glyphicon glyphicon-download'></i>&nbsp;&nbsp;" )
+        })
+        $("#unsharedDiv").on('click', 'a', function () {
+            event.preventDefault();
+            var thisElement = $(this);
+            $.ajax({
+                type: 'post',
+                url: '@Url.Action("MemberSharedAddRemove")',
+                data: {
+                    attachId: @Model.Attach.AttachmentId,
+                    memberId: thisElement.data('memberid')
+                },
+                success: function (response) {
+
+                    //新增元素 刪除元素
+                    var listitem = '@Html.ActionLink("_MemberName", "MemberSharedAddRemove", "", new { @class = "btn btn-default radius-btn", data_memberid = "_MemberId", style = "display:none"})'
+                    listitem = listitem.replace("_MemberName", response.MemberName).replace("_MemberId", response.MemberId);
+                    listitem = $("#sharedDiv").find(".panel-body").append(listitem).find('a').last();
+                    listitem.prepend("<i class='glyphicon glyphicon-download'></i>&nbsp;&nbsp;").show("slow");
+                    thisElement.hide('slow', function () { thisElement.remove() });
+                }
+            })
+
+        })
+
+        $("#sharedDiv").on('click', 'a', function () {
+            event.preventDefault();
+            var thisElement = $(this);
+            $.ajax({
+                type: 'post',
+                url: '@Url.Action("MemberSharedAddRemove")',
+                data: {
+                    attachId: @Model.Attach.AttachmentId,
+                    memberId: thisElement.data('memberid')
+                },
+                success: function (response) {
+                    //新增元素 刪除元素
+                    var listitem = '@Html.ActionLink("_MemberName", "MemberSharedAddRemove", "", new { @class = "btn btn-default radius-btn", data_memberid = "_MemberId", style = "display:none" })'
+                    listitem = listitem.replace("_MemberName", response.MemberName).replace("_MemberId", response.MemberId);
+                    listitem = $("#unsharedDiv").find(".panel-body").append(listitem).find('a').last();
+                    listitem.prepend("<i class='glyphicon glyphicon-upload'></i>&nbsp;&nbsp;").show("slow");
+                    thisElement.hide('slow', function () { thisElement.remove()});
+                }
+            })
+
+
+
+        })
+    });
+</script>   
+    

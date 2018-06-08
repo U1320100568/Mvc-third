@@ -1,0 +1,106 @@
+﻿@model IEnumerable<IntelligenceCloud.Models.ForensicContact>
+
+@{
+    ViewBag.Title = "IndexContact";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int AttachmentId = (int)Model.FirstOrDefault().AttachmentId;
+    IntelligenceCloud.Models.ForensicContact c = new IntelligenceCloud.Models.ForensicContact();
+}
+
+<h2>Cellebrite UFED報告檔	SMS簡訊</h2>
+
+<div class="text-center">
+    @Html.PagedListPager((IPagedList)Model, x => Url.Action("IndexContact", new { page = x, orderer = ViewBag.Orderer }))
+</div>
+@Html.Partial("_PartialTab", AttachmentId)
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.AttachmentId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FNum)
+            <a href='@Url.Action("IndexContact", new { orderer = c.GetType().GetProperty("FNum").Name })'><label class="caret"></label></a>
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FName)
+            <a href='@Url.Action("IndexContact", new { orderer = c.GetType().GetProperty("FName").Name })'><label class="caret"></label></a>
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FGroup)
+            <a href='@Url.Action("IndexContact", new { orderer = c.GetType().GetProperty("FGroup").Name })'><label class="caret"></label></a>
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FModifiedTime)
+            <a href='@Url.Action("IndexContact", new { orderer = c.GetType().GetProperty("FModifiedTime").Name })'><label class="caret"></label></a>
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FClause)
+            <a href='@Url.Action("IndexContact", new { orderer = c.GetType().GetProperty("FClause").Name })'><label class="caret"></label></a>
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FNote)
+            <a href='@Url.Action("IndexContact", new { orderer = c.GetType().GetProperty("FNote").Name })'><label class="caret"></label></a>
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FSource)
+            <a href='@Url.Action("IndexContact", new { orderer = c.GetType().GetProperty("FSource").Name })'><label class="caret"></label></a>
+        </th>
+
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.AttachmentId)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.FNum)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FGroup)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FModifiedTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FClause)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FNote)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FSource)
+            </td>
+
+            <td>
+                @Html.ActionLink("Edit", "EditConta", new { id = item.ForensicContactID }) |
+
+                @using (Html.BeginForm("DeleteConta", "Forensics", FormMethod.Post, new { style = "display:inline" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.Hidden("ForensicContactID", item.ForensicContactID)
+                    <input type="submit" class="btn btn-link " value="Delete" style="padding:0" />
+                }
+
+            </td>
+        </tr>
+    }
+
+</table>
+
+@section scripts{
+    @Scripts.Render("~/bundles/customJs")
+    <script type="text/javascript">
+        $(document).ready(function () {
+            tableColumnSort('@ViewBag.OrderAscend', '@ViewBag.Orderer');
+
+        });
+    </script>
+}

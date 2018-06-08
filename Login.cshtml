@@ -1,0 +1,65 @@
+﻿@model IntelligenceCloud.Models.Member
+
+
+
+    <div class="container-login-form">
+        @*<div class="login-form"></div>*@
+
+        @using (Html.BeginForm("Login","Home",FormMethod.Post,new { @class="login-form" }))
+        {
+            @Html.AntiForgeryToken()
+
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="wrap-input validate-input" data-validate="Valid email is: a@b.c">
+                @*<input class="input" type="text" name="email">*@
+                @Html.EditorFor(model => model.MemberAccount, new { htmlAttributes = new { @class = "input", name = "email" } })
+                <span class="focus-input" data-placeholder="帳號"></span>
+                @Html.ValidationMessageFor(model => model.MemberAccount, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="wrap-input validate-input" data-validate="Enter password">
+                <span class="btn-show-pass">
+                    <i class="glyphicon glyphicon-eye-close"></i>
+                </span>
+                @*<input class="input" type="password" name="pass">*@
+                @Html.EditorFor(model => model.MemberPwd, new { htmlAttributes = new { @class = "input", type = "password", name = "pass" } })
+                <span class="focus-input" data-placeholder="密碼"></span>
+                @Html.ValidationMessageFor(model => model.MemberPwd, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="container-login-sub">
+                <div class="wrap-login-sub">
+                    <div class="login-color-sub"></div>
+                    <input class="login-sub" type="submit" value="Login">
+
+
+                </div>
+            </div>
+        }
+        
+    </div>
+@ViewBag.Msg
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.input').each(function () {
+                checkHasVal($(this));
+
+                $(this).on('blur', function () {
+                    checkHasVal($(this));
+                })
+            })
+            function checkHasVal(element) {
+                if (element.val().trim() != "") {
+                    element.addClass('has-val');
+                }
+                else {
+                    element.removeClass('has-val');
+                }
+            }
+        });
+    </script>
+}

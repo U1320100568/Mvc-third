@@ -1,0 +1,209 @@
+﻿@model IntelligenceCloud.ViewModel.RoleFeatureViewModel
+
+@{
+    ViewBag.Title = "EditRoleFeature";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>角色與功能的配置</h2>
+
+<div class="alert alert-danger alert-dismissable collapse" role="alert" >
+    <button type="button"  class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+        請選擇會員
+</div>
+
+<div class="row">
+
+    <div class=" col-md-4">
+        <div class="panel panel-default radius-panel">
+            <div class="panel-heading radius-panel">
+                <h4>角色列表</h4>
+                <hr />
+            </div>
+            <div class="panel-body">
+                <ul class="nav nav-pills nav-stacked">
+
+                    @Html.Hidden("roleid", Model.CurrentRoleId)
+                    @foreach (var role in Model.Roles)
+                    {
+                        <li role="presentation">
+                            @Html.ActionLink(role.RName, "FeatureList", new { id = role.RoleId }, new { id = "feat" + role.RoleId })
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+        <div class=" col-md-4" style="display:none">
+            <div class="panel panel-info radius-panel">
+                <div class="panel-heading radius-panel">
+                    <h4>角色擁有的功能</h4>
+                    <hr />
+                </div>
+                <div class="panel-body">
+                    <ul class="nav nav-pills nav-stacked" id="ownFeat">
+                    @if (Model.RoleFeatures != null && Model.RoleFeatures.FirstOrDefault() != null)
+                    {
+
+                        foreach (var feat in Model.RoleFeatures)
+                        {
+                            <li role="presentation">
+                                <a href="#" class="ownFeatItem" data-rolefeatnum="@feat.RoleFeat.RFNum">
+                                    <i class="glyphicon glyphicon-minus"></i> @feat.FeatName
+                                </a>
+                            </li>
+                        }
+                    }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    
+
+    <div class=" col-md-4" style="display:none">
+        <div class="panel panel-info radius-panel">
+            <div class="panel-heading radius-panel">
+                <h4>未加入的功能</h4>
+                <hr />
+            </div>
+            <div class="panel-body">
+                <ul class="nav nav-pills nav-stacked" id="restFeat">
+
+                    @foreach (var feat in Model.Features)
+                    {
+                        <li role="presentation">
+                            <a href="#" class="restFeatItem" data-featid="@feat.FeatureId" >
+                                <i class="glyphicon glyphicon-plus"></i> @feat.FName 
+                            </a>
+                        </li>
+                    }
+
+
+                </ul>
+            </div>
+        </div>
+    </div>
+
+</div>
+@section scripts{
+<script type="text/javascript">
+        $(document).ready(function () {
+            var roleid = $("#roleid").val()
+            $("#feat" + roleid).parent("li").addClass("active");
+
+
+            //調整三個列表的column寬度4,4,4  6,6
+            $(".panel-info").each(function () {
+                if ($(this).find("ul").find("li").length != 0 ) {
+                    $(this).parent("div").show("slow");
+                }
+                else 
+                {
+                    $(this).parent("div").siblings().removeClass("col-md-4").addClass("col-md-6");
+                }
+            })
+
+             /////沒擁有的角色click event
+            $("#restFeat").on('click', ".restFeatItem", function () {
+                var element = $(this);
+                event.preventDefault();
+                if (roleid == "") {
+                    $(".alert").slideDown("slow");
+                    return false;
+                }
+                fetch("@Url.Action("RoleModifiedFeatures")",
+                    {   
+                        method: 'post',
+                        body: JSON.stringify({
+                            roleId: roleid,
+                            featureId: $(this).data("featid")  ///fetch 傳物件用json，content type要對應
+                        }),
+                        
+                        headers: {
+                            'Content-Type':'application/json'
+                        }
+                    }
+                ).then(function (response) {
+                    return response.json();///解析json回傳promise object所以還要再then一次
+
+                })
+                .then(function (result){
+                     //////加入element 移除element
+                    var item = $('<li role="presentation"><a href="#" class="ownFeatItem" data-rolefeatnum="' + result.roleFeatNum +
+                        '"><i class="glyphicon glyphicon-minus"></i>    '
+                        + result.featName + '  </a> </li>');///
+                    $("#ownFeat").append(item);
+                    element.parent("li").remove();
+
+                    ////加到空白陣列要show出來 💋
+                    var panelDiv = $("#ownFeat").closest(".panel-info").parent("div");
+                    if (!panelDiv.is(':visible')) {
+                        panelDiv.show("slow");
+                        panelDiv.siblings().toggleClass("col-md-6 col-md-4")
+                    }
+
+                    ////移除到空陣列要hide
+                    if ($("#restFeat").find("li").length == 0) {
+                        $("#restFeat").closest(".panel-info").parent("div").hide("slow");
+                        $("#restFeat").closest(".panel-info").parent("div").siblings().toggleClass("col-md-6 col-md-4")
+                    }
+                })
+                .catch(function (err) {
+                    console.log("err: " + err);
+                });
+            });
+
+             //擁有的角色 click event
+            $("#ownFeat").on('click', ".ownFeatItem", function () {
+                var element = $(this);
+                event.preventDefault();
+                fetch("@Url.Action("RoleModifiedFeatures")",
+                    {
+                        method: 'post',
+                        body: JSON.stringify({
+                            roleId: roleid,
+                            roleFeatureId: $(this).data("rolefeatnum")  ///fetch 傳物件用json，content type要對應
+                        }),
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+
+                    }
+                ).then(function (response) {
+                    return response.json();///解析json回傳promise object所以還要再then一次
+                })
+
+                .then(function (result) {
+                     //////加入element 移除element
+                    var item = $('<li role="presentation"><a href="#" class="restFeatItem" data-featid="' + result.featId +
+                        '"><i class="glyphicon glyphicon-plus"></i>    '
+                        + result.featName + '  </a> </li>');///
+                    $("#restFeat").append(item);
+                    element.parent("li").remove();
+
+                    ////加到空白陣列要show出來 💋
+                    var panelDiv = $("#restFeat").closest(".panel-info").parent("div");
+                    if (!panelDiv.is(':visible')) {
+                        panelDiv.show("slow");
+                        panelDiv.siblings().toggleClass("col-md-6 col-md-4")
+                    }
+
+                    ////移除到空陣列要hide
+                    if ($("#ownFeat").find("li").length == 0) {
+                        $("#ownFeat").closest(".panel-info").parent("div").hide("slow");
+                        $("#ownFeat").closest(".panel-info").parent("div").siblings().toggleClass("col-md-6 col-md-4")
+                    }
+                    
+                })
+                .catch(function (err) {
+                    console.log("err: "+ err);
+                });
+            });
+        })
+
+
+</script>
+}

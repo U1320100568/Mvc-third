@@ -1,0 +1,86 @@
+﻿@model IEnumerable<IntelligenceCloud.Models.ForensicSMS>
+
+@{
+    ViewBag.Title = "IndexSms";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int AttachmentId = (int)Model.FirstOrDefault().AttachmentId;
+    IntelligenceCloud.Models.ForensicSMS s = new IntelligenceCloud.Models.ForensicSMS();
+}
+<h2>Cellebrite UFED報告檔	聯絡人</h2>
+<div class="row">
+    
+    
+
+    <div class=" text-center">
+        @Html.PagedListPager((IPagedList)Model, x => Url.Action("IndexSms", new { page = x }))
+    </div>
+    
+</div>
+    @Html.Partial("_PartialTab", AttachmentId)
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.AttachmentId)
+                
+            </th>
+            
+            <th>
+                @Html.DisplayNameFor(model => model.FNum)
+                <a href='@Url.Action("IndexSms", new { orderer = s.GetType().GetProperty("FNum").Name })' ><label class="caret"></label></a>
+                
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FCorrespond)
+                <a href='@Url.Action("IndexSms", new { orderer = s.GetType().GetProperty("FCorrespond").Name })' ><label class="caret"></label></a>
+                
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FDatetime)
+                <a href='@Url.Action("IndexSms", new { orderer = s.GetType().GetProperty("FDatetime").Name })' ><label class="caret"></label></a>
+                
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AttachmentId)
+                </td>
+               
+                <td>
+                    @Html.DisplayFor(modelItem => item.FNum)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FCorrespond)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FDatetime)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "EditSms", new { id = item.ForensicSMSID }) |
+
+                    @using (Html.BeginForm("DeleteSms","Forensics",FormMethod.Post,new { style = "display:inline;"}))
+                    {   
+                        @Html.AntiForgeryToken()
+                        @Html.Hidden("ForensicSMSID", item.ForensicSMSID )
+                        <input type="submit" class="btn btn-link"  value="Delete" style="padding:0"/>
+                    }
+                    
+                </td>
+            </tr>
+        }
+
+    </table>
+
+
+@section scripts{
+    @Scripts.Render("~/bundles/customJs")
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            tableColumnSort('@ViewBag.OrderAscend', '@ViewBag.Orderer');
+        });
+    </script>
+ }
